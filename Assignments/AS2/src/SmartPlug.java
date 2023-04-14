@@ -1,11 +1,12 @@
 public class SmartPlug extends SmartDevice{
     private static int defaultVolts = 220;
-
     public void setAmpereVal(double ampereVal) {
         if (ampereVal > 0)
             this.ampereVal = ampereVal;
-        else
-            System.out.println("Ampere value has to be positive!");
+        else {
+            System.out.println("ERROR: Ampere value must be a positive number!");
+            setIsErroneous(true);
+        }
     }
     private double ampereVal;
     public SmartPlug(String name) {
@@ -23,9 +24,5 @@ public class SmartPlug extends SmartDevice{
     }
 
     public void Switch(String status) {
-    }
-
-    public String getName() {
-        return super.getName();
     }
 }

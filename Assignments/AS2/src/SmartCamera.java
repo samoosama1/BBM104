@@ -1,9 +1,15 @@
+/**
+ * Subclass of SmartDevice.
+ */
 public class SmartCamera extends SmartDevice {
     public void setMegabytePerMin(double megabytePerMin) {
         if (megabytePerMin > 0)
             this.megabytePerMin = megabytePerMin;
-        else
+        else {
             System.out.println("Megabyte per minute value has to be non-negative!");
+            setIsErroneous(true);
+        }
+
     }
 
     private double megabytePerMin;

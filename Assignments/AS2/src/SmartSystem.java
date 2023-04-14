@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class SmartSystem {
     private LocalDateTime initialTime;
-    private ArrayList<String[]> inputArr;
+    private ArrayList<String[]> inputArr = new ArrayList<>();
     private String[] currentCommand;
     private HashMap<String, SmartDevice> smartDevices = new HashMap<>();
 
@@ -37,8 +37,8 @@ public class SmartSystem {
     }
 
     public void setInitialTime() {
-        LocalDateTime initialTime = LocalDateTime.parse(currentCommand[1]);
-        this.initialTime = initialTime;
+        String localDateTimeStr = String.join("T", currentCommand[1].split("_"));
+        this.initialTime = LocalDateTime.parse(localDateTimeStr);
     }
 
     public void addSmartDevice() {
@@ -48,6 +48,7 @@ public class SmartSystem {
                 addSmartPlug();
                 break;
             case "SmartCamera":
+                addSmartCamera();
                 break;
             case "SmartLamp":
                 break;
@@ -70,11 +71,15 @@ public class SmartSystem {
         switch (currentCommand.length) {
             case 3:
                 smartDevices.put(deviceName, new SmartPlug(deviceName));
+                break;
             case 4:
                 smartDevices.put(deviceName, new SmartPlug(deviceName, initStatus));
+                break;
             case 5:
                 smartDevices.put(deviceName, new SmartPlug(deviceName, initStatus, ampereVal));
+                break;
         }
+        checkErroneousDevice(deviceName);
     }
 
     public void addSmartCamera() {
@@ -96,13 +101,41 @@ public class SmartSystem {
                 smartDevices.put(deviceName, new SmartCamera(deviceName, initStatus, megabytePerMinute));
                 break;
         }
+        checkErroneousDevice(deviceName);
     }
 
     public void addSmartLamp() {
-
+        String deviceName = currentCommand[2];
+        String initStatus = null;
+        int kelvinVal = 0;
+        int brightness = 0;
+        if (currentCommand.length > 3)
+            initStatus = currentCommand[3];
+        if (currentCommand.length > 4) {
+            kelvinVal = Integer.parseInt(currentCommand[4]);
+            brightness = Integer.parseInt(currentCommand[5]);
+        }
+        switch (currentCommand.length) {
+            case 3:
+                smartDevices.put(deviceName, new SmartLamp(deviceName));
+                break;
+            case 4:
+                smartDevices.put(deviceName, new SmartLamp(deviceName, initStatus));
+                break;
+            case 6:
+                smartDevices.put(deviceName, new SmartLamp(deviceName, initStatus, kelvinVal, brightness));
+                break;
+        }
+        checkErroneousDevice(deviceName);
     }
 
     public void addSmartColorLamp() {
 
+    }
+
+    public void checkErroneousDevice(String deviceName) {
+        if (smartDevices.get(deviceName).getIsErroneous()) {
+            smartDevices.remove(deviceName);
+        }
     }
 }
