@@ -14,7 +14,7 @@ public class Grid {
         this.board = new String[row][col];
         for (int x = 0; x < row; x++) {
             rowArray = input[x].split(" ");
-            System.arraycopy(rowArray, 0, board[x], 0, col);
+
         }
     }
 
