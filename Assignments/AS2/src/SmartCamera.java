@@ -7,9 +7,7 @@ public class SmartCamera extends SmartDevice {
             this.megabytePerMin = megabytePerMin;
         else {
             System.out.println("Megabyte per minute value has to be non-negative!");
-            setIsErroneous(true);
         }
-
     }
 
     private double megabytePerMin;
@@ -26,9 +24,8 @@ public class SmartCamera extends SmartDevice {
         super(name, status);
         setMegabytePerMin(megabytePerMin);
     }
-    public String getName() {
-        return super.getName();
-    }
+
     public void Switch(String status) {
+
     }
 }

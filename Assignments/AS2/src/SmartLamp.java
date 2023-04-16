@@ -8,9 +8,7 @@ public class SmartLamp extends SmartDevice{
             this.kelvinVal = kelvinVal;
         else {
             System.out.println("ERROR: Kelvin value must be in range of 2000K-6500K!");
-            setIsErroneous(true);
         }
-
     }
 
     public int getBrightness() {
@@ -18,8 +16,13 @@ public class SmartLamp extends SmartDevice{
     }
 
     public void setBrightness(int brightness) {
-        this.brightness = brightness;
+        if (brightness >= 0 && brightness <= 100)
+            this.brightness = brightness;
+        else {
+            System.out.println("ERROR: Brightness must be in range of 0%-100%!");
+        }
     }
+
 
     private int kelvinVal = 4000;
     private int brightness = 100;

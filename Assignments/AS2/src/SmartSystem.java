@@ -2,10 +2,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * The driver class for the System.
+ */
 public class SmartSystem {
     private LocalDateTime initialTime;
     private ArrayList<String[]> inputArr = new ArrayList<>();
     private String[] currentCommand;
+
     private HashMap<String, SmartDevice> smartDevices = new HashMap<>();
 
     public SmartSystem() {
@@ -45,7 +49,8 @@ public class SmartSystem {
         String deviceType = currentCommand[1];
         switch (deviceType) {
             case "SmartPlug":
-                addSmartPlug();
+                if (CheckArgumentValidity.plugIsValid(currentCommand, smartDevices))
+                    SmartDeviceFactory.addSmartPlug(CheckArgumentValidity.getValidArgs(), smartDevices);
                 break;
             case "SmartCamera":
                 addSmartCamera();
@@ -59,28 +64,6 @@ public class SmartSystem {
         }
     }
 
-    public void addSmartPlug() {
-        String deviceName = currentCommand[2];
-        String initStatus = null;
-        double ampereVal = 0.0;
-        if (currentCommand.length > 3)
-            initStatus = currentCommand[3];
-        if (currentCommand.length > 4)
-            ampereVal = Double.parseDouble(currentCommand[4]);
-
-        switch (currentCommand.length) {
-            case 3:
-                smartDevices.put(deviceName, new SmartPlug(deviceName));
-                break;
-            case 4:
-                smartDevices.put(deviceName, new SmartPlug(deviceName, initStatus));
-                break;
-            case 5:
-                smartDevices.put(deviceName, new SmartPlug(deviceName, initStatus, ampereVal));
-                break;
-        }
-        checkErroneousDevice(deviceName);
-    }
 
     public void addSmartCamera() {
         String deviceName = currentCommand[2];
@@ -101,7 +84,6 @@ public class SmartSystem {
                 smartDevices.put(deviceName, new SmartCamera(deviceName, initStatus, megabytePerMinute));
                 break;
         }
-        checkErroneousDevice(deviceName);
     }
 
     public void addSmartLamp() {
@@ -126,16 +108,12 @@ public class SmartSystem {
                 smartDevices.put(deviceName, new SmartLamp(deviceName, initStatus, kelvinVal, brightness));
                 break;
         }
-        checkErroneousDevice(deviceName);
     }
 
     public void addSmartColorLamp() {
 
     }
 
-    public void checkErroneousDevice(String deviceName) {
-        if (smartDevices.get(deviceName).getIsErroneous()) {
-            smartDevices.remove(deviceName);
-        }
-    }
+
+
 }

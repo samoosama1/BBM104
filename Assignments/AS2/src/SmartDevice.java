@@ -1,16 +1,9 @@
+import java.time.LocalDateTime;
+
 /**
  * Parent class of every other smart device.
  */
 public abstract class SmartDevice {
-    public boolean getIsErroneous() {
-        return thisObjectIsErroneous;
-    }
-
-    public void setIsErroneous(boolean IsErroneous) {
-        thisObjectIsErroneous = IsErroneous;
-    }
-
-    private boolean thisObjectIsErroneous = false;
     public String getStatus() {
         return status;
     }
@@ -19,6 +12,7 @@ public abstract class SmartDevice {
         this.status = status;
     }
 
+    private LocalDateTime switchTime;
     private String status;
     public String getName() {
         return name;
