@@ -11,9 +11,6 @@ public class SmartCamera extends SmartDevice {
     }
 
     private double megabytePerMin;
-    public SmartCamera(String name) {
-        super(name);
-    }
 
     public SmartCamera(String name, double megabytePerMin) {
         super(name);

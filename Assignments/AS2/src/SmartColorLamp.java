@@ -16,7 +16,7 @@ public class SmartColorLamp extends SmartLamp{
         super(name, initStatus);
     }
 
-    public SmartColorLamp(String name, String initStatus, int kelvinOrColorCode, int brightness) {
+    public SmartColorLamp(String name, String initStatus, int kelvinVal, int brightness) {
         super(name, initStatus);
         setBrightness(brightness);
     }

@@ -45,4 +45,30 @@ public class ThrowException {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void throwInvalidFirstCommand() {
+        try {
+            throw new IllegalArgumentException(
+                    "ERROR: First command must be set initial time! Program is going to terminate!");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void throwNoSuchDevice() {
+        try {
+            throw new IllegalArgumentException("ERROR: No such device!");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void throwSameStatus(String status) {
+        try {
+            throw new IllegalArgumentException(
+                    String.format("ERROR: This device is already switched %s!", status.toLowerCase()));
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

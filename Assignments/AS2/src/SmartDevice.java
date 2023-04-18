@@ -33,5 +33,12 @@ public abstract class SmartDevice {
         this.status = status;
     }
 
-    public abstract void Switch(String status);
+    public void _switch(String status) {
+        if (this.status.equals(status))
+            ThrowException.throwSameStatus(this.status);
+        else {
+            this.status = status;
+        }
+    }
+
 }

@@ -7,16 +7,11 @@ public class CheckArgumentValidity {
 
     private static ValidArgs validArgs;
     public static boolean lampIsValid(String[] currentCommand, HashMap<String, SmartDevice> smartDevices) {
-        String deviceName = currentCommand[2];
-        String initStatus = null;
-        int kelvinVal = 0;
-        int brightness = 0;
-        boolean allArgsValid = true;
-        boolean nameIsValid = !smartDevices.containsKey(deviceName);
-        boolean statusIsValid = true;
-        boolean kelvinIsValid = true;
-        boolean brightnessIsValid = true;
-
+        String deviceName = currentCommand[2], initStatus = null;
+        int kelvinVal = 0, brightness = 0;
+        boolean allArgsValid, statusIsValid, kelvinIsValid, brightnessIsValid, nameIsValid;
+        allArgsValid = kelvinIsValid = brightnessIsValid = statusIsValid = true;
+        nameIsValid = !smartDevices.containsKey(deviceName);
         if (currentCommand.length > 3) {
             initStatus = currentCommand[3];
             statusIsValid = initStatus.equals("on") || initStatus.equals("off");
@@ -48,17 +43,20 @@ public class CheckArgumentValidity {
                     validArgs = new LampValidArgs(deviceName, initStatus);
                 }
                 break;
-            case 5:
+            case 6:
                 if (!nameIsValid || !statusIsValid || !kelvinIsValid || !brightnessIsValid) {
                     if (!kelvinIsValid)
                         ThrowException.throwKelvinOutOfBounds();
-                    else if (!nameIsValid)
+                    else if (!brightnessIsValid)
                         ThrowException.throwBrightnessOutOfBounds();
+                    else if (!statusIsValid)
+                        ThrowException.throwErroneousCommand();
                     else
                         ThrowException.throwNameExists();
                     allArgsValid = false;
                 } else
                     validArgs = new LampValidArgs(deviceName, initStatus, kelvinVal, brightness);
+                break;
         }
         return allArgsValid;
     }
@@ -68,13 +66,11 @@ public class CheckArgumentValidity {
     }
 
     public static boolean cameraIsValid(String[] currentCommand, HashMap<String, SmartDevice> smartDevices) {
-        String deviceName = currentCommand[2];
-        String initStatus = null;
+        String deviceName = currentCommand[2], initStatus = null;
         double megaBytePerMinute = 0.0;
-        boolean allArgsValid = true;
-        boolean nameIsValid = !smartDevices.containsKey(deviceName);
-        boolean statusIsValid = true;
-        boolean megaByteIsValid = true;
+        boolean allArgsValid, statusIsValid, megaByteIsValid, nameIsValid;
+        allArgsValid = statusIsValid = megaByteIsValid = true;
+        nameIsValid = !smartDevices.containsKey(deviceName);
         if (currentCommand.length > 3) {
             megaBytePerMinute = Double.parseDouble(currentCommand[3]);
             megaByteIsValid = megaBytePerMinute > 0.0;
@@ -86,15 +82,13 @@ public class CheckArgumentValidity {
         switch (currentCommand.length) {
             case 4:
                 if (!nameIsValid || !megaByteIsValid) {
-                    if (!nameIsValid) {
+                    if (!nameIsValid)
                         ThrowException.throwNameExists();
-                    } else {
+                    else
                         ThrowException.throwMegaByteOutOfBounds();
-                    }
                     allArgsValid = false;
-                } else {
+                } else
                     validArgs = new CameraValidArgs(deviceName, megaBytePerMinute);
-                }
                 break;
             case 5:
                 if (!nameIsValid || !statusIsValid || !megaByteIsValid) {
@@ -112,16 +106,14 @@ public class CheckArgumentValidity {
     }
 
     public static boolean plugIsValid(String[] currentCommand, HashMap<String, SmartDevice> smartDevices) {
-        String deviceName = currentCommand[2];
-        String initStatus = null;
+        String deviceName = currentCommand[2], initStatus = null;
         double ampereVal = 0.0;
-        boolean allArgsValid = true;
-        boolean nameIsValid = !smartDevices.containsKey(deviceName);
-        boolean statusIsValid = true;
-        boolean ampereIsValid = true;
+        boolean allArgsValid, statusIsValid, ampereIsValid, nameIsValid;
+        allArgsValid = statusIsValid = ampereIsValid = true;
+        nameIsValid = !smartDevices.containsKey(deviceName);
         if (currentCommand.length > 3) {
             initStatus = currentCommand[3];
-            statusIsValid = initStatus.equals("on") || initStatus.equals("off");
+            statusIsValid = initStatus.equals("On") || initStatus.equals("Off");
         }
         if (currentCommand.length > 4) {
             ampereVal = Double.parseDouble(currentCommand[4]);
@@ -143,18 +135,17 @@ public class CheckArgumentValidity {
                    else
                        ThrowException.throwErroneousCommand();
                    allArgsValid = false;
-                } else {
+                } else
                     validArgs = new PlugValidArgs(deviceName, initStatus);
-                }
                 break;
             case 5:
                 if (!nameIsValid || !statusIsValid || !ampereIsValid) {
                     if (!ampereIsValid)
                         ThrowException.throwAmpereOutOfBounds();
                     else if (!nameIsValid)
-                        ThrowException.throwErroneousCommand();
-                    else
                         ThrowException.throwNameExists();
+                    else
+                        ThrowException.throwErroneousCommand();
                     allArgsValid = false;
                 } else
                     validArgs = new PlugValidArgs(deviceName, initStatus, ampereVal);
@@ -169,13 +160,13 @@ class ValidArgs {
     String status;
     public ValidArgs(String name) {
         this.name = name;
-        int argNum = 1;
+        this.argNum = 1;
     }
 
     public ValidArgs(String name, String status) {
         this.name = name;
         this.status = status;
-        int argNum = 2;
+        this.argNum = 2;
     }
 }
 class PlugValidArgs extends ValidArgs{
@@ -191,7 +182,7 @@ class PlugValidArgs extends ValidArgs{
     public PlugValidArgs(String name, String status, double ampereVal) {
         super(name, status);
         this.ampereVal = ampereVal;
-        int argNum = 3;
+        this.argNum = 3;
     }
 }
 
@@ -200,11 +191,13 @@ class CameraValidArgs extends ValidArgs {
     public CameraValidArgs(String name, double megaBytePerMinute) {
         super(name);
         this.megaBytePerMinute = megaBytePerMinute;
+        this.argNum = 2;
     }
 
     public CameraValidArgs(String name, String status, double megaBytePerMinute) {
         super(name, status);
         this.megaBytePerMinute = megaBytePerMinute;
+        this.argNum = 3;
     }
 }
 
@@ -223,9 +216,32 @@ class LampValidArgs extends ValidArgs {
         super(name, status);
         this.kelvinVal = kelvinVal;
         this.brightness = brightness;
+        this.argNum = 4;
     }
 }
 
 class ColorLampValidArgs extends LampValidArgs {
-    
+    int hexCode;
+    boolean isKelvin;
+
+    public ColorLampValidArgs(String name) {
+        super(name);
+    }
+
+    public ColorLampValidArgs(String name, String status) {
+        super(name, status);
+    }
+
+    public ColorLampValidArgs(String name, String status, int kelvinVal, int brightness) {
+        super(name, status, kelvinVal, brightness);
+        isKelvin = true;
+    }
+
+    public ColorLampValidArgs(String name, String status, String hexCodeStr, int brightness) {
+        super(name, status);
+        this.hexCode = Integer.decode(hexCodeStr);
+        this.brightness = brightness;
+        isKelvin = false;
+        argNum = 4;
+    }
 }
