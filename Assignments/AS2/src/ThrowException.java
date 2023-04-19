@@ -71,4 +71,12 @@ public class ThrowException {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void throwColorCodeOutOfBounds() {
+        try {
+            throw new IllegalArgumentException("ERROR: Color code value must be in range of 0x0-0xFFFFFF!");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

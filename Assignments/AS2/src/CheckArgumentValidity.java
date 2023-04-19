@@ -1,84 +1,39 @@
 import java.util.HashMap;
 
 public class CheckArgumentValidity {
-    public static ValidArgs getValidArgs() {
+    public ValidArgs getValidArgs() {
         return validArgs;
     }
 
-    private static ValidArgs validArgs;
-    public static boolean lampIsValid(String[] currentCommand, HashMap<String, SmartDevice> smartDevices) {
-        String deviceName = currentCommand[2], initStatus = null;
-        int kelvinVal = 0, brightness = 0;
-        boolean allArgsValid, statusIsValid, kelvinIsValid, brightnessIsValid, nameIsValid;
-        allArgsValid = kelvinIsValid = brightnessIsValid = statusIsValid = true;
-        nameIsValid = !smartDevices.containsKey(deviceName);
-        if (currentCommand.length > 3) {
-            initStatus = currentCommand[3];
-            statusIsValid = initStatus.equals("on") || initStatus.equals("off");
-        }
-        if (currentCommand.length > 4) {
-            kelvinVal = Integer.parseInt(currentCommand[4]);
-            brightness = Integer.parseInt(currentCommand[5]);
-            kelvinIsValid = kelvinVal >= 2000 && kelvinVal <= 6500;
-            brightnessIsValid = brightness >= 0 && brightness <= 100;
-        }
-        switch (currentCommand.length) {
-            case 3:
-                if (nameIsValid) {
-                    validArgs = new LampValidArgs(deviceName);
-                } else {
-                    ThrowException.throwNameExists();
-                    allArgsValid = false;
-                }
-                break;
-            case 4:
-                if (!nameIsValid || !statusIsValid) {
-                    if (!nameIsValid) {
-                        ThrowException.throwNameExists();
-                    } else {
-                        ThrowException.throwErroneousCommand();
-                    }
-                    allArgsValid = false;
-                } else {
-                    validArgs = new LampValidArgs(deviceName, initStatus);
-                }
-                break;
-            case 6:
-                if (!nameIsValid || !statusIsValid || !kelvinIsValid || !brightnessIsValid) {
-                    if (!kelvinIsValid)
-                        ThrowException.throwKelvinOutOfBounds();
-                    else if (!brightnessIsValid)
-                        ThrowException.throwBrightnessOutOfBounds();
-                    else if (!statusIsValid)
-                        ThrowException.throwErroneousCommand();
-                    else
-                        ThrowException.throwNameExists();
-                    allArgsValid = false;
-                } else
-                    validArgs = new LampValidArgs(deviceName, initStatus, kelvinVal, brightness);
-                break;
-        }
-        return allArgsValid;
-    }
+    private HashMap<String, SmartDevice> smartDevices;
+    private ValidArgs validArgs;
 
-    public static void colorLampIsValid() {
+    public CheckArgumentValidity(HashMap<String, SmartDevice> smartDevices) {
+        this.smartDevices = smartDevices;
 
     }
+    private boolean allArgsValid;
+    private boolean statusIsValid, megaByteIsValid, nameIsValid,
+            ampereIsValid , kelvinIsValid, brightnessIsValid, hexCodeValid;
+    private double megaBytePerMinute, ampereVal ;
+    private String deviceName, initStatus, hexCodeStr;
+    private int kelvinVal, brightness, hexCode;
+    private String[] currentCommand;
 
-    public static boolean cameraIsValid(String[] currentCommand, HashMap<String, SmartDevice> smartDevices) {
-        String deviceName = currentCommand[2], initStatus = null;
-        double megaBytePerMinute = 0.0;
-        boolean allArgsValid, statusIsValid, megaByteIsValid, nameIsValid;
-        allArgsValid = statusIsValid = megaByteIsValid = true;
-        nameIsValid = !smartDevices.containsKey(deviceName);
+    public void setCameraBools() {
+        setNameBool();
         if (currentCommand.length > 3) {
             megaBytePerMinute = Double.parseDouble(currentCommand[3]);
             megaByteIsValid = megaBytePerMinute > 0.0;
         }
         if (currentCommand.length > 4) {
             initStatus = currentCommand[4];
-            statusIsValid = initStatus.equals("on") || initStatus.equals("off");
+            statusIsValid = initStatus.equals("On") || initStatus.equals("Off");
         }
+    }
+    public boolean cameraIsValid() {
+        allArgsValid = true;
+        setCameraBools();
         switch (currentCommand.length) {
             case 4:
                 if (!nameIsValid || !megaByteIsValid) {
@@ -101,16 +56,19 @@ public class CheckArgumentValidity {
                     allArgsValid = false;
                 } else
                     validArgs = new CameraValidArgs(deviceName, initStatus, megaBytePerMinute);
+                break;
+            default:
+                allArgsValid = false;
         }
         return allArgsValid;
     }
 
-    public static boolean plugIsValid(String[] currentCommand, HashMap<String, SmartDevice> smartDevices) {
-        String deviceName = currentCommand[2], initStatus = null;
-        double ampereVal = 0.0;
-        boolean allArgsValid, statusIsValid, ampereIsValid, nameIsValid;
-        allArgsValid = statusIsValid = ampereIsValid = true;
+    public void setNameBool() {
+        deviceName = currentCommand[2];
         nameIsValid = !smartDevices.containsKey(deviceName);
+    }
+    public void setPlugBools() {
+        setNameBool();
         if (currentCommand.length > 3) {
             initStatus = currentCommand[3];
             statusIsValid = initStatus.equals("On") || initStatus.equals("Off");
@@ -119,6 +77,10 @@ public class CheckArgumentValidity {
             ampereVal = Double.parseDouble(currentCommand[4]);
             ampereIsValid = ampereVal > 0.0;
         }
+    }
+    public boolean plugIsValid() {
+        allArgsValid = true;
+        setPlugBools();
         switch (currentCommand.length) {
             case 3:
                 if (nameIsValid) {
@@ -149,8 +111,122 @@ public class CheckArgumentValidity {
                     allArgsValid = false;
                 } else
                     validArgs = new PlugValidArgs(deviceName, initStatus, ampereVal);
+                break;
+            default:
+                allArgsValid = false;
         }
         return allArgsValid;
+    }
+
+    public void setLampBools() throws NumberFormatException{
+        setNameBool();
+        if (currentCommand.length > 3) {
+            initStatus = currentCommand[3];
+            statusIsValid = initStatus.equals("On") || initStatus.equals("Off");
+        }
+        if (currentCommand.length > 4) {
+            brightness = Integer.parseInt(currentCommand[5]);
+            brightnessIsValid = brightness >= 0 && brightness <= 100;
+            kelvinVal = Integer.parseInt(currentCommand[4]);
+            kelvinIsValid = kelvinVal >= 2000 && kelvinVal <= 6500;
+        }
+    }
+
+    public boolean lampIsValid() {
+        allArgsValid = true;
+        setLampBools();
+        if (currentCommand.length != 6)
+            lampHelper1();
+        else {
+            lampHelper2();
+        }
+        return allArgsValid;
+    }
+
+
+    public void lampHelper1() {
+        switch (currentCommand.length) {
+            case 3:
+                if (nameIsValid) {
+                    validArgs = new LampValidArgs(deviceName);
+                } else {
+                    ThrowException.throwNameExists();
+                    allArgsValid = false;
+                }
+                break;
+            case 4:
+                if (!nameIsValid || !statusIsValid) {
+                    if (!nameIsValid) {
+                        ThrowException.throwNameExists();
+                    } else {
+                        ThrowException.throwErroneousCommand();
+                    }
+                    allArgsValid = false;
+                } else
+                    validArgs = new LampValidArgs(deviceName, initStatus);
+                break;
+            default:
+                allArgsValid = false;
+        }
+    }
+
+    public void lampHelper2() {
+        if (!nameIsValid || !statusIsValid || !kelvinIsValid || !brightnessIsValid) {
+            if (!kelvinIsValid)
+                ThrowException.throwKelvinOutOfBounds();
+            else if (!brightnessIsValid)
+                ThrowException.throwBrightnessOutOfBounds();
+            else if (!statusIsValid)
+                ThrowException.throwErroneousCommand();
+            else
+                ThrowException.throwNameExists();
+            allArgsValid = false;
+        } else
+            validArgs = new LampValidArgs(deviceName, initStatus, kelvinVal, brightness);
+    }
+    public boolean colorLampIsValid() {
+        allArgsValid = true;
+        boolean isKelvinArg = true;
+        boolean isHexCode = false;
+        try {
+            setLampBools();
+        } catch (NumberFormatException e) {
+            try {
+                isKelvinArg = false;
+                hexCodeStr = currentCommand[4];
+                hexCode = Integer.decode(hexCodeStr);
+                hexCodeValid = hexCode >= 0x000000 && hexCode <= 0xFFFFFF;
+                isHexCode = true;
+            } catch (NumberFormatException err) {
+                ThrowException.throwErroneousCommand();
+                allArgsValid = false;
+            }
+        }
+        if (currentCommand.length != 6)
+            lampHelper1();
+        else {
+            if (isKelvinArg) {
+                lampHelper2();
+            } else if (isHexCode) {
+                if (!nameIsValid || !statusIsValid || !hexCodeValid || !brightnessIsValid) {
+                    if (!hexCodeValid)
+                        ThrowException.throwColorCodeOutOfBounds();
+                    else if (!brightnessIsValid)
+                        ThrowException.throwBrightnessOutOfBounds();
+                    else if (!statusIsValid)
+                        ThrowException.throwErroneousCommand();
+                    else
+                        ThrowException.throwNameExists();
+                    allArgsValid = false;
+                } else
+                    validArgs = new LampValidArgs(deviceName, initStatus, hexCodeStr, brightness);
+            }
+        }
+        return allArgsValid;
+    }
+
+    public void setCurrentCommand(String[] currentCommand) {
+        this.currentCommand = currentCommand;
     }
 }
 
@@ -204,6 +280,8 @@ class CameraValidArgs extends ValidArgs {
 class LampValidArgs extends ValidArgs {
     int kelvinVal;
     int brightness;
+    String hexCodeStr;
+    boolean isKelvin;
     public LampValidArgs(String name) {
         super(name);
     }
@@ -216,32 +294,15 @@ class LampValidArgs extends ValidArgs {
         super(name, status);
         this.kelvinVal = kelvinVal;
         this.brightness = brightness;
+        this.isKelvin = true;
         this.argNum = 4;
     }
-}
 
-class ColorLampValidArgs extends LampValidArgs {
-    int hexCode;
-    boolean isKelvin;
-
-    public ColorLampValidArgs(String name) {
-        super(name);
-    }
-
-    public ColorLampValidArgs(String name, String status) {
+    public LampValidArgs(String name, String status, String hexCodeStr, int brightness) {
         super(name, status);
-    }
-
-    public ColorLampValidArgs(String name, String status, int kelvinVal, int brightness) {
-        super(name, status, kelvinVal, brightness);
-        isKelvin = true;
-    }
-
-    public ColorLampValidArgs(String name, String status, String hexCodeStr, int brightness) {
-        super(name, status);
-        this.hexCode = Integer.decode(hexCodeStr);
+        this.hexCodeStr = hexCodeStr;
         this.brightness = brightness;
-        isKelvin = false;
-        argNum = 4;
+        this.isKelvin = false;
+        this.argNum = 4;
     }
 }

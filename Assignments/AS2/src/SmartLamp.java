@@ -39,8 +39,4 @@ public class SmartLamp extends SmartDevice{
         setKelvinVal(kelvinVal);
         setBrightness(brightness);
     }
-
-    public void Switch(String status) {
-        System.out.println("Mom");
-    }
 }

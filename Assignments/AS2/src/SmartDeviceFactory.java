@@ -48,19 +48,25 @@ public class SmartDeviceFactory {
     }
 
     public static void addSmartColorLamp(ValidArgs validArgs, HashMap<String, SmartDevice> smartDevices) {
-        ColorLampValidArgs colorLampValidArgs = (ColorLampValidArgs) validArgs;
+        LampValidArgs colorLampValidArgs = (LampValidArgs) validArgs;
         switch (colorLampValidArgs.argNum) {
             case 1:
-                smartDevices.put(colorLampValidArgs.name, new SmartLamp(colorLampValidArgs.name));
+                smartDevices.put(colorLampValidArgs.name, new SmartColorLamp(colorLampValidArgs.name));
                 break;
             case 2:
                 smartDevices.put(
-                        colorLampValidArgs.name, new SmartLamp(colorLampValidArgs.name, colorLampValidArgs.status));
+                        colorLampValidArgs.name, new SmartColorLamp(colorLampValidArgs.name, colorLampValidArgs.status));
                 break;
             case 4:
-                smartDevices.put(colorLampValidArgs.name, new SmartLamp(
-                        colorLampValidArgs.name, colorLampValidArgs.status,
-                        colorLampValidArgs.kelvinVal, colorLampValidArgs.brightness));
+                if (colorLampValidArgs.isKelvin) {
+                    smartDevices.put(colorLampValidArgs.name, new SmartColorLamp(
+                            colorLampValidArgs.name, colorLampValidArgs.status,
+                            colorLampValidArgs.kelvinVal, colorLampValidArgs.brightness));
+                } else {
+                    smartDevices.put(colorLampValidArgs.name, new SmartColorLamp(
+                            colorLampValidArgs.name, colorLampValidArgs.status,
+                            colorLampValidArgs.hexCodeStr, colorLampValidArgs.brightness));
+                }
                 break;
 
         }

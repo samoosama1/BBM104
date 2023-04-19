@@ -12,6 +12,7 @@ public abstract class SmartDevice {
         this.status = status;
     }
 
+    private LocalDateTime currentTime;
     private LocalDateTime switchTime;
     private String status;
     public String getName() {

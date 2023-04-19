@@ -17,7 +17,12 @@ public class SmartColorLamp extends SmartLamp{
     }
 
     public SmartColorLamp(String name, String initStatus, int kelvinVal, int brightness) {
+        super(name, initStatus, kelvinVal, brightness);
+    }
+
+    public SmartColorLamp(String name, String initStatus, String hexCodeStr, int brightness) {
         super(name, initStatus);
+        colorBaseHex = Integer.decode(hexCodeStr);
         setBrightness(brightness);
     }
 }
