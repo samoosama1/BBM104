@@ -4,6 +4,11 @@ import java.time.LocalDateTime;
  * Parent class of every other smart device.
  */
 public abstract class SmartDevice {
+    private LocalDateTime currentTime;
+    private LocalDateTime switchTime;
+    private String status = "Off";
+    private String name;
+
     public String getStatus() {
         return status;
     }
@@ -12,9 +17,22 @@ public abstract class SmartDevice {
         this.status = status;
     }
 
-    private LocalDateTime currentTime;
-    private LocalDateTime switchTime;
-    private String status;
+    public LocalDateTime getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(LocalDateTime currentTime) {
+        this.currentTime = currentTime;
+    }
+
+    public LocalDateTime getSwitchTime() {
+        return switchTime;
+    }
+
+    public void setSwitchTime(LocalDateTime switchTime) {
+        this.switchTime = switchTime;
+    }
+
     public String getName() {
         return name;
     }
@@ -23,23 +41,29 @@ public abstract class SmartDevice {
         this.name = name;
     }
 
-    private String name;
-
-    public SmartDevice(String name) {
+    public SmartDevice(String name, LocalDateTime currentTime) {
         this.name = name;
+        this.currentTime = currentTime;
     }
 
-    public SmartDevice(String name, String status) {
+    public SmartDevice(String name, String status, LocalDateTime currentTime) {
         this.name = name;
         this.status = status;
+        this.currentTime = currentTime;
     }
 
-    public void _switch(String status) {
-        if (this.status.equals(status))
-            ThrowException.throwSameStatus(this.status);
-        else {
-            this.status = status;
+    public void setTime(LocalDateTime currentTime) {
+        if (getSwitchTime() != null) {
+            int compareVal = currentTime.compareTo(getSwitchTime());
+            if (compareVal >= 0) {
+                _switch();
+                setSwitchTime(null);
+            }
         }
+        setCurrentTime(currentTime);
     }
 
+    public abstract void _switch(String status);
+    public abstract void _switch();
+//    public abstract String getInfo();
 }

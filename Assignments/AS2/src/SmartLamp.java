@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+
 public class SmartLamp extends SmartDevice{
     public int getKelvinVal() {
         return kelvinVal;
@@ -26,17 +28,36 @@ public class SmartLamp extends SmartDevice{
 
     private int kelvinVal = 4000;
     private int brightness = 100;
-    public SmartLamp(String name) {
-        super(name);
+
+    public SmartLamp(String name, LocalDateTime currentTime) {
+        super(name, currentTime);
     }
 
-    public SmartLamp(String name, String initStatus) {
-        super(name, initStatus);
+    public SmartLamp(String name, String initStatus, LocalDateTime currentTime) {
+        super(name, initStatus, currentTime);
     }
 
-    public SmartLamp(String name, String initStatus, int kelvinVal, int brightness) {
-        super(name, initStatus);
+    public SmartLamp(String name, String initStatus, int kelvinVal, int brightness, LocalDateTime currentTime) {
+        super(name, initStatus, currentTime);
         setKelvinVal(kelvinVal);
         setBrightness(brightness);
+    }
+
+    public void _switch() {
+        if (getStatus().equals("Off")) {
+            setStatus("On");
+        } else {
+            setStatus("Off");
+        }
+        setSwitchTime(null);
+    }
+
+    public void _switch(String status) {
+        if (getStatus().equals(status)) {
+            System.out.println("Same status.");
+        } else {
+            setStatus(status);
+            setSwitchTime(null);
+        }
     }
 }

@@ -1,28 +1,61 @@
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 /**
  * Subclass of SmartDevice.
  */
 public class SmartCamera extends SmartDevice {
-    public void setMegabytePerMin(double megabytePerMin) {
-        if (megabytePerMin > 0)
-            this.megabytePerMin = megabytePerMin;
-        else {
-            System.out.println("Megabyte per minute value has to be non-negative!");
+    private final double megaBytePerMinute;
+    private double storageUsage;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+
+    public SmartCamera(String name, double megaBytePerMin, LocalDateTime currentTime) {
+            super(name, currentTime);
+            this.megaBytePerMinute = megaBytePerMin;
+        }
+
+    public SmartCamera(String name, String status, double megaBytePerMin, LocalDateTime currentTime) {
+            super(name, status, currentTime);
+            this.megaBytePerMinute = megaBytePerMin;
+    }
+
+    public void _switch() {
+        if (getStatus().equals("Off")) {
+            setStatus("On");
+            startTime = getSwitchTime();
+        } else {
+            setStatus("Off");
+            endTime = getSwitchTime();
+            calculateStorageUsage();
+        }
+        setSwitchTime(null);
+
+    }
+
+    public void _switch(String status) {
+        if (getStatus().equals(status)) {
+            System.out.println("Same status.");
+        } else {
+            setStatus(status);
+            if (status.equals("Off")) {
+                endTime = getCurrentTime();
+                calculateStorageUsage();
+            }
+            else
+                startTime = getCurrentTime();
+            setSwitchTime(null);
         }
     }
 
-    private double megabytePerMin;
-
-    public SmartCamera(String name, double megabytePerMin) {
-        super(name);
-        setMegabytePerMin(megabytePerMin);
+    public double calculateElapsedTime() {
+        return (double) ChronoUnit.SECONDS.between(startTime, endTime) / 60;
     }
 
-    public SmartCamera(String name, String status, double megabytePerMin) {
-        super(name, status);
-        setMegabytePerMin(megabytePerMin);
-    }
-
-    public void Switch(String status) {
-
+    public void calculateStorageUsage() {
+        double elapsedTime = calculateElapsedTime();
+        startTime = null;
+        endTime = null;
+        storageUsage += megaBytePerMinute * elapsedTime;
     }
 }
