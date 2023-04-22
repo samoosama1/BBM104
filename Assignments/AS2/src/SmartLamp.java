@@ -9,7 +9,7 @@ public class SmartLamp extends SmartDevice{
     }
 
     public void setKelvinVal(int kelvinVal) {
-        if (kelvinVal >= 0 && kelvinVal <= 2000)
+        if (kelvinVal >= 2000 && kelvinVal <= 6500)
             this.kelvinVal = kelvinVal;
         else {
             ThrowException.kelvinOutOfBounds();

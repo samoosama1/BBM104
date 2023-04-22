@@ -29,7 +29,7 @@ public class SmartColorLamp extends SmartLamp{
     }
 
     public void setColorBaseHex(int colorBaseHex) {
-        if (colorBaseHex > 0x000000 && colorBaseHex < 0xFFFFFF) {
+        if (colorBaseHex >= 0x000000 && colorBaseHex <= 0xFFFFFF) {
             this.colorBaseHex = colorBaseHex;
             colorMode = true;
         } else {

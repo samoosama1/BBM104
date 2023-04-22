@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Parent class of every other smart device.
@@ -8,6 +9,7 @@ public abstract class SmartDevice {
     private LocalDateTime switchTime;
     private String status = "Off";
     private String name;
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
 
     public String getStatus() {
         return status;

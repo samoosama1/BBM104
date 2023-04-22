@@ -40,38 +40,37 @@ ERROR: Color code value must be in range of 0x0-0xFFFFFF!
 COMMAND: Add	SmartColorLamp	CLamp4	On	0x00FF00	70
 COMMAND: Add	SmartColorLamp	ABCDEFG
 COMMAND: Remove	CLamp1
+Information about removed smart device is as follows:
+SmartColorLamp@3a82f6ef
 COMMAND: Add	SmartColorLamp	CLamp1
-ERROR: There is already a smart device with same name!
 COMMAND: Switch	Plug15	On
-ERROR: No such device!
+ERROR: There is not such a device!
 COMMAND: Switch	Plug2	On
 ERROR: This device is already switched on!
 COMMAND: PlugIn	Plug2	-3
 ERROR: Ampere value must be a positive number!
 COMMAND: PlugIn	Plug2	10
-ERROR: There is already an item plugged in to that plug!
 COMMAND: PlugIn	Plug2	7
 ERROR: There is already an item plugged in to that plug!
 COMMAND: SetTime	2023-03-31_14:05:00
 COMMAND: SetInitialTime	2023-03-31_14:15:00
+ERROR: Erroneous command!
 COMMAND: Switch	Plug2	Off
 COMMAND: SkipMinutes	5
-ERROR: Erroneous command!
 COMMAND: Switch	Plug2	On
 COMMAND: SkipMinutes	5
-ERROR: Erroneous command!
 COMMAND: Switch	Plug2	Off
 COMMAND: PlugOut	Plug2
 COMMAND: PlugOut	Plug2
 ERROR: This plug has no item to plug out from that plug!
 COMMAND: PlugIn	Camera1	10
-ERROR: This device is not a smart lamp!
+ERROR: This device is not a smart plug!
 COMMAND: Switch	Plug2	On
 COMMAND: SetKelvin	Camera1	2700
 ERROR: This device is not a smart lamp!
 COMMAND: SetKelvin	Lamp1	2700
-ERROR: Kelvin value must be in range of 2000K-6500K!
 COMMAND: SetKelvin	Lamp1	1900
+ERROR: Kelvin value must be in range of 2000K-6500K!
 COMMAND: SetBrightness	Camera1	2700
 ERROR: This device is not a smart lamp!
 COMMAND: SetColorCode	Camera1	0xFFAAFF
@@ -87,7 +86,6 @@ ERROR: This device is not a smart lamp!
 COMMAND: SetColor	Camera1	0xFFFFFF	100
 ERROR: This device is not a smart color lamp!
 COMMAND: SetColor	CLamp1	0xFFFFFF	100
-ERROR: Color code value must be in range of 0x0-0xFFFFFF!
 COMMAND: SetColor	CLamp1	0xFFGGHH	100
 ERROR: Erroneous command!
 COMMAND: SetColor	CLamp1	0x001100	120
@@ -95,16 +93,30 @@ ERROR: Brightness must be in range of 0%-100%!
 COMMAND: SetWhite	CLamp2	6600	100
 ERROR: Kelvin value must be in range of 2000K-6500K!
 COMMAND: SetWhite	CLamp2	6500	120
-ERROR: Kelvin value must be in range of 2000K-6500K!
 ERROR: Brightness must be in range of 0%-100%!
 COMMAND: SetWhite	CLamp2	2000	55
 COMMAND: SetWhite	CLamp2	6600	120
 ERROR: Kelvin value must be in range of 2000K-6500K!
-ERROR: Brightness must be in range of 0%-100%!
 COMMAND: PlugIn	Plug1	20
 COMMAND: SkipMinutes	5
-ERROR: Erroneous command!
 COMMAND: ZReport
+Time is:	2023-03-31_14:20:00
+Smart Plug Plug1 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug2 is on and consumed 366,67W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug3 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug4 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug5 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+SmartCamera@4667ae56
+SmartCamera@77cd7a0
+SmartCamera@204f30ec
+SmartLamp@e25b2fe
+SmartLamp@754ba872
+SmartLamp@146ba0ac
+SmartColorLamp@4dfa3a9d
+SmartColorLamp@6eebc39e
+SmartColorLamp@464bee09
+SmartColorLamp@f6c48ac
+SmartColorLamp@13deb50e
 COMMAND: ChangeName	Plug1	CLamp1
 ERROR: There is already a smart device with same name!
 COMMAND: ChangeName	Plug1	Plug1
@@ -113,26 +125,122 @@ COMMAND: ChangeName	Plug1	Plug10
 COMMAND: ChangeName	Plug10
 ERROR: Erroneous command!
 COMMAND: ChangeName	Plug100	Plug100
-ERROR: No such device!
+ERROR: Both of the names are the same, nothing changed!
 COMMAND: PlugOut	Plug10
 COMMAND: ZReport
+Time is:	2023-03-31_14:20:00
+Smart Plug Plug10 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug2 is on and consumed 366,67W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug3 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug4 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug5 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+SmartCamera@4667ae56
+SmartCamera@77cd7a0
+SmartCamera@204f30ec
+SmartLamp@e25b2fe
+SmartLamp@754ba872
+SmartLamp@146ba0ac
+SmartColorLamp@4dfa3a9d
+SmartColorLamp@6eebc39e
+SmartColorLamp@464bee09
+SmartColorLamp@f6c48ac
+SmartColorLamp@13deb50e
 COMMAND: SetSwitchTime	Plug10	2023-03-31_15:00:00
 COMMAND: ZReport
+Time is:	2023-03-31_14:20:00
+Smart Plug Plug10 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is 2023-03-31_15:00:00
+Smart Plug Plug2 is on and consumed 366,67W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug3 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug4 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug5 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+SmartCamera@4667ae56
+SmartCamera@77cd7a0
+SmartCamera@204f30ec
+SmartLamp@e25b2fe
+SmartLamp@754ba872
+SmartLamp@146ba0ac
+SmartColorLamp@4dfa3a9d
+SmartColorLamp@6eebc39e
+SmartColorLamp@464bee09
+SmartColorLamp@f6c48ac
+SmartColorLamp@13deb50e
 COMMAND: SetTime	2023-03-31_14:05:00
 ERROR: Time cannot be reversed!
 COMMAND: SetSwitchTime	Camera1	2023-03-31_15:10:00
 COMMAND: ZReport
+Time is:	2023-03-31_14:20:00
+Smart Plug Plug10 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is 2023-03-31_15:00:00
+SmartCamera@4667ae56
+Smart Plug Plug2 is on and consumed 366,67W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug3 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug4 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug5 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+SmartCamera@77cd7a0
+SmartCamera@204f30ec
+SmartLamp@e25b2fe
+SmartLamp@754ba872
+SmartLamp@146ba0ac
+SmartColorLamp@4dfa3a9d
+SmartColorLamp@6eebc39e
+SmartColorLamp@464bee09
+SmartColorLamp@f6c48ac
+SmartColorLamp@13deb50e
 COMMAND: SetSwitchTime	Lamp3	2023-03-31_15:01:00
 COMMAND: ZReport
+Time is:	2023-03-31_14:20:00
+Smart Plug Plug10 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is 2023-03-31_15:00:00
+SmartLamp@146ba0ac
+SmartCamera@4667ae56
+Smart Plug Plug2 is on and consumed 366,67W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug3 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug4 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug5 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+SmartCamera@77cd7a0
+SmartCamera@204f30ec
+SmartLamp@e25b2fe
+SmartLamp@754ba872
+SmartColorLamp@4dfa3a9d
+SmartColorLamp@6eebc39e
+SmartColorLamp@464bee09
+SmartColorLamp@f6c48ac
+SmartColorLamp@13deb50e
 COMMAND: SetSwitchTime	Lamp1	2023-03-31_15:00:00
 COMMAND: ZReport
+Time is:	2023-03-31_14:20:00
+Smart Plug Plug10 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is 2023-03-31_15:00:00
+SmartLamp@e25b2fe
+SmartLamp@146ba0ac
+SmartCamera@4667ae56
+Smart Plug Plug2 is on and consumed 366,67W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug3 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug4 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug5 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+SmartCamera@77cd7a0
+SmartCamera@204f30ec
+SmartLamp@754ba872
+SmartColorLamp@4dfa3a9d
+SmartColorLamp@6eebc39e
+SmartColorLamp@464bee09
+SmartColorLamp@f6c48ac
+SmartColorLamp@13deb50e
 COMMAND: SetSwitchTime	Lamp2	2023-04-01_00:00:00
 COMMAND: ZReport
+Time is:	2023-03-31_14:20:00
+Smart Plug Plug10 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is 2023-03-31_15:00:00
+SmartLamp@e25b2fe
+SmartLamp@146ba0ac
+SmartCamera@4667ae56
+SmartLamp@754ba872
+Smart Plug Plug2 is on and consumed 366,67W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug3 is off and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug4 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+Smart Plug Plug5 is on and consumed 0,00W so far (excluding current device), and its time to switch its status is null
+SmartCamera@77cd7a0
+SmartCamera@204f30ec
+SmartColorLamp@4dfa3a9d
+SmartColorLamp@6eebc39e
+SmartColorLamp@464bee09
+SmartColorLamp@f6c48ac
+SmartColorLamp@13deb50e
 COMMAND: SetTime	2023-03-31_15:99:00
-ERROR: Time format is not correct!
-COMMAND: SetTime	2023-03-31_15:05:00
-COMMAND: ZReport
-COMMAND: Nop
-COMMAND: ZReport
-COMMAND: Nop
-COMMAND: ZReport
+ERROR: Erroneous command!

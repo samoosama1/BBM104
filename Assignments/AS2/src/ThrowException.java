@@ -30,7 +30,7 @@ public class ThrowException {
     }
 
     public static void noSuchDevice() {
-        OutputHelper.write(err.prefix("No such device!"));
+        OutputHelper.write(err.prefix("There is not such a device!"));
     }
 
     public static void sameStatus(String status) {
@@ -54,7 +54,7 @@ public class ThrowException {
     }
 
     public static void notSmartPlug() {
-        OutputHelper.write(err.prefix("This device is not a smart lamp!"));
+        OutputHelper.write(err.prefix("This device is not a smart plug!"));
     }
 
     public static void alreadyPluggedOut() {

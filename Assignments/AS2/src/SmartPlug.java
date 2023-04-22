@@ -35,9 +35,10 @@ public class SmartPlug extends SmartDevice{
 
 
     public String toString() {
-        return String.format("Smart Plug %s is %s and consumed %f so far (excluding current device), and its time to"
+        return String.format("Smart Plug %s is %s and consumed %.2fW so far (excluding current device), and its time to"
                        + " switch its status is %s", getName(), getStatus().toLowerCase(),
-                                                        energyConsumption, getStatus());
+                                                        energyConsumption, (getSwitchTime() == null) ? "null" :
+                                                        getSwitchTime().format(formatter));
     }
 
     public void calculateEnergyConsumption() {
@@ -93,8 +94,7 @@ public class SmartPlug extends SmartDevice{
             ThrowException.alreadyPluggedIn();
         } else {
             setAmpereVal(ampereVal);
-            pluggedIn = true;
-            if (getStatus().equals("On"))
+            if (getStatus().equals("On") && pluggedIn)
                 startTime = getCurrentTime();
         }
     }

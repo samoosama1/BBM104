@@ -39,6 +39,12 @@ public class SmartSystem {
             OutputHelper.write(com.prefix(String.join("\t", command)));
             checkArgVal.setCurrentCommand(command);
             String commandKeyword = command[0];
+            if (!mustCheck) {
+                if (commandKeyword.equals("SetInitialTime")) {
+                    ThrowException.erroneousCommand();
+                    continue;
+                }
+            }
             if (mustCheck) {
                 if (!commandKeyword.equals("SetInitialTime")) {
                     ThrowException.invalidFirstCommand();
@@ -51,24 +57,29 @@ public class SmartSystem {
     }
 
     public void functionSelector(String commandKeyword) {
-        switch (commandKeyword) {
-            case "SetInitialTime": setTime(); break;
-            case "Add": addSmartDevice(); break;
-            case "Remove": removeSmartDevice(); break;
-            case "SetTime": setTime(); break;
-            case "Switch": switchDevice(); break;
-            case "SetSwitchTime": break;
-            case "ChangeName": changeDeviceName(); break;
-            case "PlugIn": plugDeviceIn(); break;
-            case "PlugOut": plugDeviceOut(); break;
-            case "SetKelvin": setKelvin(); break;
-            case "SetBrightness": setBrightness(); break;
-            case "SetColorCode": setColorCode(); break;
-            case "SetWhite": setWhite(); break;
-            case "SetColor": setColor(); break;
-            case "ZReport": break;
-            case "Nop": break;
-            default: ThrowException.erroneousCommand();
+        try {
+            switch (commandKeyword) {
+                case "SetInitialTime": setTime(); break;
+                case "Add": addSmartDevice(); break;
+                case "Remove": removeSmartDevice(); break;
+                case "SetTime": setTime(); break;
+                case "Switch": switchDevice(); break;
+                case "SetSwitchTime": setDeviceSwitchTime(); break;
+                case "ChangeName": changeDeviceName(); break;
+                case "PlugIn": plugDeviceIn(); break;
+                case "PlugOut": plugDeviceOut(); break;
+                case "SetKelvin": setKelvin(); break;
+                case "SetBrightness": setBrightness(); break;
+                case "SetColorCode": setColorCode(); break;
+                case "SetWhite": setWhite(); break;
+                case "SetColor": setColor(); break;
+                case "SkipMinutes": skipMinutes(); break;
+                case "ZReport": zReport(); break;
+                case "Nop": break;
+                default: ThrowException.erroneousCommand();
+            }
+        } catch (Exception e) {
+            ThrowException.erroneousCommand();
         }
     }
 
@@ -88,9 +99,7 @@ public class SmartSystem {
                 }
             } else {
                 currentTime = timeToChange;
-                for (SmartDevice device : smartDeviceList) {
-                    device.setTime(currentTime);
-                }
+                setTimeOfDevices();
             }
         } catch (DateTimeParseException e) {
             ThrowException.timeFormatNotCorrect();
@@ -123,31 +132,32 @@ public class SmartSystem {
 
     public void removeSmartDevice() {
         String deviceName = currentCommand[1];
-        SmartDevice device = smartDevices.get(deviceName);
-        if(!smartDevices.containsKey(deviceName))
+        if (smartDevices.containsKey(deviceName)) {
+            SmartDevice device = smartDevices.get(deviceName);
+            if (device.getStatus().equals("On")){
+                device._switch("Off");
+            }
+            OutputHelper.write("Information about removed smart device is as follows:");
+            OutputHelper.write(device.toString());
+            smartDevices.remove(deviceName);
+            smartDeviceList.remove(device);
+        } else
             ThrowException.noSuchDevice();
-        else if (device.getStatus().equals("On")){
-            device._switch("Off");
-        }
     }
 
     public void changeDeviceName() {
-        try {
-            String deviceName = currentCommand[1];
-            String targetName = currentCommand[2];
-            if (!smartDevices.containsKey(deviceName))
-                ThrowException.noSuchDevice();
-            else if (deviceName.equals(targetName))
-                ThrowException.sameName();
-            else if (smartDevices.containsKey(targetName))
-                ThrowException.nameExists();
-            else {
-                smartDevices.get(deviceName).setName(targetName);
-                smartDevices.put(targetName, smartDevices.get(deviceName));
-                smartDevices.remove(deviceName);
-            }
-        } catch (Exception e) {
-            ThrowException.erroneousCommand();
+        String deviceName = currentCommand[1];
+        String targetName = currentCommand[2];
+        if (deviceName.equals(targetName))
+            ThrowException.sameName();
+        else if (!smartDevices.containsKey(deviceName))
+            ThrowException.noSuchDevice();
+        else if (smartDevices.containsKey(targetName))
+            ThrowException.nameExists();
+        else {
+            smartDevices.get(deviceName).setName(targetName);
+            smartDevices.put(targetName, smartDevices.get(deviceName));
+            smartDevices.remove(deviceName);
         }
     }
 
@@ -163,38 +173,30 @@ public class SmartSystem {
     }
 
     public void plugDeviceIn() {
-        try {
-            String deviceName = currentCommand[1];
-            double ampereVal = Double.parseDouble(currentCommand[2]);
-            if (smartDevices.containsKey(deviceName)) {
-                try {
-                    SmartPlug plug = (SmartPlug) smartDevices.get(deviceName);
-                    plug.plugIn(ampereVal);
-                } catch (ClassCastException e) {
-                    ThrowException.notSmartPlug();
-                }
-            } else
-                ThrowException.noSuchDevice();
-        } catch (Exception e) {
-            ThrowException.erroneousCommand();
-        }
+        String deviceName = currentCommand[1];
+        double ampereVal = Double.parseDouble(currentCommand[2]);
+        if (smartDevices.containsKey(deviceName)) {
+            try {
+                SmartPlug plug = (SmartPlug) smartDevices.get(deviceName);
+                plug.plugIn(ampereVal);
+            } catch (ClassCastException e) {
+                ThrowException.notSmartPlug();
+            }
+        } else
+            ThrowException.noSuchDevice();
     }
 
     public void plugDeviceOut() {
-        try {
-            String deviceName = currentCommand[1];
-            if (smartDevices.containsKey(deviceName)) {
-                try {
-                    SmartPlug plug = (SmartPlug) smartDevices.get(deviceName);
-                    plug.plugOut();
-                } catch (ClassCastException e) {
-                    ThrowException.notSmartPlug();
-                }
-            } else
-                ThrowException.noSuchDevice();
-        } catch (Exception e) {
-            ThrowException.erroneousCommand();
-        }
+        String deviceName = currentCommand[1];
+        if (smartDevices.containsKey(deviceName)) {
+            try {
+                SmartPlug plug = (SmartPlug) smartDevices.get(deviceName);
+                plug.plugOut();
+            } catch (ClassCastException e) {
+                ThrowException.notSmartPlug();
+            }
+        } else
+            ThrowException.noSuchDevice();
     }
 
     public void sortDevices() {
@@ -202,109 +204,121 @@ public class SmartSystem {
     }
 
     public void setKelvin() {
-        try {
-            String deviceName = currentCommand[1];
-            int kelvinVal = Integer.parseInt(currentCommand[2]);
-            if (smartDevices.containsKey(deviceName)) {
-                try {
-                    SmartLamp lamp = (SmartLamp) smartDevices.get(deviceName);
-                    lamp.setKelvinVal(kelvinVal);
-                } catch (ClassCastException e) {
-                    ThrowException.notSmartLamp();
-                }
-            } else
-                ThrowException.noSuchDevice();
-        } catch (Exception e) {
-            ThrowException.erroneousCommand();
-        }
+        String deviceName = currentCommand[1];
+        int kelvinVal = Integer.parseInt(currentCommand[2]);
+        if (smartDevices.containsKey(deviceName)) {
+            try {
+                SmartLamp lamp = (SmartLamp) smartDevices.get(deviceName);
+                lamp.setKelvinVal(kelvinVal);
+            } catch (ClassCastException e) {
+                ThrowException.notSmartLamp();
+            }
+        } else
+            ThrowException.noSuchDevice();
     }
 
     public void setBrightness() {
-        try {
-            String deviceName = currentCommand[1];
-            int brightness = Integer.parseInt(currentCommand[2]);
-            if (smartDevices.containsKey(deviceName)) {
-                try {
-                    SmartLamp lamp = (SmartLamp) smartDevices.get(deviceName);
-                    lamp.setBrightness(brightness);
-                } catch (ClassCastException e) {
-                    ThrowException.notSmartLamp();
-                }
+        String deviceName = currentCommand[1];
+        int brightness = Integer.parseInt(currentCommand[2]);
+        if (smartDevices.containsKey(deviceName)) {
+            try {
+                SmartLamp lamp = (SmartLamp) smartDevices.get(deviceName);
+                lamp.setBrightness(brightness);
+            } catch (ClassCastException e) {
+                ThrowException.notSmartLamp();
             }
-        } catch (Exception e) {
-            ThrowException.erroneousCommand();
         }
     }
 
     public void setColorCode() {
-        try {
-            String deviceName = currentCommand[1];
-            int colorCode = Integer.decode(currentCommand[2]);
-            if (smartDevices.containsKey(deviceName)) {
-                try {
-                    SmartColorLamp colorLamp = (SmartColorLamp) smartDevices.get(deviceName);
-                    colorLamp.setColorBaseHex(colorCode);
-                } catch (ClassCastException e) {
-                    ThrowException.notSmartColorLamp();
-                }
-            } else
-                ThrowException.noSuchDevice();
-        } catch (Exception e) {
-            ThrowException.erroneousCommand();
-        }
+        String deviceName = currentCommand[1];
+        int colorCode = Integer.decode(currentCommand[2]);
+        if (smartDevices.containsKey(deviceName)) {
+            try {
+                SmartColorLamp colorLamp = (SmartColorLamp) smartDevices.get(deviceName);
+                colorLamp.setColorBaseHex(colorCode);
+            } catch (ClassCastException e) {
+                ThrowException.notSmartColorLamp();
+            }
+        } else
+            ThrowException.noSuchDevice();
     }
 
     public void setWhite() {
-        try {
-            String deviceName = currentCommand[1];
-            int kelvinVal = Integer.parseInt(currentCommand[2]);
-            int brightness = Integer.parseInt(currentCommand[3]);
-            if (smartDevices.containsKey(deviceName)) {
-                try {
-                    SmartLamp lamp = (SmartLamp) smartDevices.get(deviceName);
+        String deviceName = currentCommand[1];
+        int kelvinVal = Integer.parseInt(currentCommand[2]);
+        int brightness = Integer.parseInt(currentCommand[3]);
+        if (smartDevices.containsKey(deviceName)) {
+            try {
+                SmartLamp lamp = (SmartLamp) smartDevices.get(deviceName);
+                boolean kelvinValid = (kelvinVal >= 2000) && (kelvinVal <= 6500);
+                boolean brightnessValid = (brightness >= 0) && (brightness <= 100);
+                if (kelvinValid && brightnessValid) {
                     lamp.setKelvinVal(kelvinVal);
                     lamp.setBrightness(brightness);
-                } catch (ClassCastException e) {
-                    ThrowException.notSmartLamp();
-                }
-            } else {
-                ThrowException.noSuchDevice();
+                } else if (!kelvinValid)
+                    ThrowException.kelvinOutOfBounds();
+                else
+                    ThrowException.brightnessOutOfBounds();
+            } catch (ClassCastException e) {
+                ThrowException.notSmartLamp();
             }
-        } catch (Exception e) {
-            ThrowException.erroneousCommand();
+        } else {
+            ThrowException.noSuchDevice();
         }
     }
 
     public void setColor() {
-        try {
-            String deviceName = currentCommand[1];
-            int colorCode = Integer.decode(currentCommand[2]);
-            int brightness = Integer.parseInt(currentCommand[3]);
-            if (smartDevices.containsKey(deviceName)) {
-                try {
-                    SmartColorLamp colorLamp = (SmartColorLamp) smartDevices.get(deviceName);
+        String deviceName = currentCommand[1];
+        int colorCode = Integer.decode(currentCommand[2]);
+        int brightness = Integer.parseInt(currentCommand[3]);
+        if (smartDevices.containsKey(deviceName)) {
+            try {
+                SmartColorLamp colorLamp = (SmartColorLamp) smartDevices.get(deviceName);
+                boolean colorValid = (colorCode >= 0x000000) && (colorCode <= 0xFFFFFF);
+                boolean brightnessValid = (brightness >= 0) && (brightness <= 100);
+                if (colorValid && brightnessValid) {
                     colorLamp.setColorBaseHex(colorCode);
                     colorLamp.setBrightness(brightness);
-                } catch (ClassCastException e) {
-                    ThrowException.notSmartColorLamp();
-                }
+                } else if (!colorValid)
+                    ThrowException.colorCodeOutOfBounds();
+                else
+                    ThrowException.brightnessOutOfBounds();
+            } catch (ClassCastException e) {
+                ThrowException.notSmartColorLamp();
             }
-        } catch (Exception e) {
-            ThrowException.erroneousCommand();
         }
     }
 
     public void setDeviceSwitchTime() {
-        try {
-            String deviceName = currentCommand[1];
-            LocalDateTime switchTime = LocalDateTime.parse(currentCommand[2], formatter);
-            if (smartDevices.containsKey(deviceName)) {
-                smartDevices.get(deviceName).setSwitchTime(switchTime);
-            } else {
-                ThrowException.noSuchDevice();
-            }
-        } catch (Exception e) {
-            ThrowException.erroneousCommand();
+        String deviceName = currentCommand[1];
+        LocalDateTime switchTime = LocalDateTime.parse(currentCommand[2], formatter);
+        if (smartDevices.containsKey(deviceName)) {
+            smartDevices.get(deviceName).setSwitchTime(switchTime);
+            sortDevices();
+        } else {
+            ThrowException.noSuchDevice();
         }
     }
+
+    public void zReport() {
+        String out = String.format("Time is:\t%s", currentTime.format(formatter));
+        OutputHelper.write(out);
+        for (SmartDevice device : smartDeviceList) {
+            OutputHelper.write(device.toString());
+        }
+    }
+
+    public void skipMinutes() {
+        int minutesToSkip = Integer.parseInt(currentCommand[1]);
+        currentTime = currentTime.plusMinutes(minutesToSkip);
+        setTimeOfDevices();
+    }
+
+    public void setTimeOfDevices() {
+        for (SmartDevice device : smartDeviceList) {
+            device.setTime(currentTime);
+        }
+    }
+
 }
