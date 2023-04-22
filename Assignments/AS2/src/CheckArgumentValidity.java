@@ -5,7 +5,7 @@ public class CheckArgumentValidity {
         return validArgs;
     }
 
-    private HashMap<String, SmartDevice> smartDevices;
+    private final HashMap<String, SmartDevice> smartDevices;
     private ValidArgs validArgs;
 
     public CheckArgumentValidity(HashMap<String, SmartDevice> smartDevices) {
@@ -38,9 +38,9 @@ public class CheckArgumentValidity {
             case 4:
                 if (!nameIsValid || !megaByteIsValid) {
                     if (!nameIsValid)
-                        ThrowException.throwNameExists();
+                        ThrowException.nameExists();
                     else
-                        ThrowException.throwMegaByteOutOfBounds();
+                        ThrowException.megaByteOutOfBounds();
                     allArgsValid = false;
                 } else
                     validArgs = new CameraValidArgs(deviceName, megaBytePerMinute);
@@ -48,11 +48,11 @@ public class CheckArgumentValidity {
             case 5:
                 if (!nameIsValid || !statusIsValid || !megaByteIsValid) {
                     if (!megaByteIsValid)
-                        ThrowException.throwAmpereOutOfBounds();
+                        ThrowException.ampereOutOfBounds();
                     else if (!nameIsValid)
-                        ThrowException.throwErroneousCommand();
+                        ThrowException.erroneousCommand();
                     else
-                        ThrowException.throwNameExists();
+                        ThrowException.nameExists();
                     allArgsValid = false;
                 } else
                     validArgs = new CameraValidArgs(deviceName, initStatus, megaBytePerMinute);
@@ -86,16 +86,16 @@ public class CheckArgumentValidity {
                 if (nameIsValid) {
                     validArgs = new PlugValidArgs(deviceName);
                 } else {
-                    ThrowException.throwNameExists();
+                    ThrowException.nameExists();
                     allArgsValid = false;
                 }
                 break;
             case 4:
                 if (!nameIsValid || !statusIsValid) {
                    if (!nameIsValid)
-                       ThrowException.throwNameExists();
+                       ThrowException.nameExists();
                    else
-                       ThrowException.throwErroneousCommand();
+                       ThrowException.erroneousCommand();
                    allArgsValid = false;
                 } else
                     validArgs = new PlugValidArgs(deviceName, initStatus);
@@ -103,11 +103,11 @@ public class CheckArgumentValidity {
             case 5:
                 if (!nameIsValid || !statusIsValid || !ampereIsValid) {
                     if (!ampereIsValid)
-                        ThrowException.throwAmpereOutOfBounds();
+                        ThrowException.ampereOutOfBounds();
                     else if (!nameIsValid)
-                        ThrowException.throwNameExists();
+                        ThrowException.nameExists();
                     else
-                        ThrowException.throwErroneousCommand();
+                        ThrowException.erroneousCommand();
                     allArgsValid = false;
                 } else
                     validArgs = new PlugValidArgs(deviceName, initStatus, ampereVal);
@@ -150,16 +150,16 @@ public class CheckArgumentValidity {
                 if (nameIsValid) {
                     validArgs = new LampValidArgs(deviceName);
                 } else {
-                    ThrowException.throwNameExists();
+                    ThrowException.nameExists();
                     allArgsValid = false;
                 }
                 break;
             case 4:
                 if (!nameIsValid || !statusIsValid) {
                     if (!nameIsValid) {
-                        ThrowException.throwNameExists();
+                        ThrowException.nameExists();
                     } else {
-                        ThrowException.throwErroneousCommand();
+                        ThrowException.erroneousCommand();
                     }
                     allArgsValid = false;
                 } else
@@ -173,13 +173,13 @@ public class CheckArgumentValidity {
     public void lampHelper2() {
         if (!nameIsValid || !statusIsValid || !kelvinIsValid || !brightnessIsValid) {
             if (!kelvinIsValid)
-                ThrowException.throwKelvinOutOfBounds();
+                ThrowException.kelvinOutOfBounds();
             else if (!brightnessIsValid)
-                ThrowException.throwBrightnessOutOfBounds();
+                ThrowException.brightnessOutOfBounds();
             else if (!statusIsValid)
-                ThrowException.throwErroneousCommand();
+                ThrowException.erroneousCommand();
             else
-                ThrowException.throwNameExists();
+                ThrowException.nameExists();
             allArgsValid = false;
         } else
             validArgs = new LampValidArgs(deviceName, initStatus, kelvinVal, brightness);
@@ -198,7 +198,7 @@ public class CheckArgumentValidity {
                 hexCodeValid = hexCode >= 0x000000 && hexCode <= 0xFFFFFF;
                 isHexCode = true;
             } catch (NumberFormatException err) {
-                ThrowException.throwErroneousCommand();
+                ThrowException.erroneousCommand();
                 allArgsValid = false;
             }
         }
@@ -210,13 +210,13 @@ public class CheckArgumentValidity {
             } else if (isHexCode) {
                 if (!nameIsValid || !statusIsValid || !hexCodeValid || !brightnessIsValid) {
                     if (!hexCodeValid)
-                        ThrowException.throwColorCodeOutOfBounds();
+                        ThrowException.colorCodeOutOfBounds();
                     else if (!brightnessIsValid)
-                        ThrowException.throwBrightnessOutOfBounds();
+                        ThrowException.brightnessOutOfBounds();
                     else if (!statusIsValid)
-                        ThrowException.throwErroneousCommand();
+                        ThrowException.erroneousCommand();
                     else
-                        ThrowException.throwNameExists();
+                        ThrowException.nameExists();
                     allArgsValid = false;
                 } else
                     validArgs = new LampValidArgs(deviceName, initStatus, hexCodeStr, brightness);

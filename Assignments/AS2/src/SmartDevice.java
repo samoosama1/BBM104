@@ -65,5 +65,4 @@ public abstract class SmartDevice {
 
     public abstract void _switch(String status);
     public abstract void _switch();
-//    public abstract String getInfo();
 }

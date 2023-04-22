@@ -1,6 +1,9 @@
 import java.time.LocalDateTime;
 
 public class SmartLamp extends SmartDevice{
+    private int kelvinVal = 4000;
+    private int brightness = 100;
+
     public int getKelvinVal() {
         return kelvinVal;
     }
@@ -9,7 +12,7 @@ public class SmartLamp extends SmartDevice{
         if (kelvinVal >= 0 && kelvinVal <= 2000)
             this.kelvinVal = kelvinVal;
         else {
-            System.out.println("ERROR: Kelvin value must be in range of 2000K-6500K!");
+            ThrowException.kelvinOutOfBounds();
         }
     }
 
@@ -21,13 +24,9 @@ public class SmartLamp extends SmartDevice{
         if (brightness >= 0 && brightness <= 100)
             this.brightness = brightness;
         else {
-            System.out.println("ERROR: Brightness must be in range of 0%-100%!");
+            ThrowException.brightnessOutOfBounds();
         }
     }
-
-
-    private int kelvinVal = 4000;
-    private int brightness = 100;
 
     public SmartLamp(String name, LocalDateTime currentTime) {
         super(name, currentTime);

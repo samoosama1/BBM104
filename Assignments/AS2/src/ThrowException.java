@@ -1,92 +1,75 @@
 public class ThrowException {
     private static final Printable err = s -> "ERROR: " + s;
 
-    public static void throwNameExists() {
-        try {
-            throw new IllegalArgumentException(err.prefix("There is already a smart device with same name!"));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void nameExists() {
+        OutputHelper.write(err.prefix("There is already a smart device with same name!"));
     }
 
-    public static void throwErroneousCommand() {
-        try {
-            throw new IllegalArgumentException(err.prefix("Erroneous command!"));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void erroneousCommand() {
+        OutputHelper.write(err.prefix("Erroneous command!"));
     }
 
-    public static void throwKelvinOutOfBounds() {
-        try {
-            throw new IllegalArgumentException(err.prefix("Kelvin value must be in range of 2000K-6500K!"));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void kelvinOutOfBounds() {
+        OutputHelper.write(err.prefix("Kelvin value must be in range of 2000K-6500K!"));
     }
 
-    public static void throwBrightnessOutOfBounds() {
-        try {
-            throw new IllegalArgumentException(err.prefix("Brightness must be in range of 0%-100%!"));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-    public static void throwAmpereOutOfBounds() {
-        try {
-            throw new IllegalArgumentException(err.prefix("Ampere value must be a positive number!"));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void brightnessOutOfBounds() {
+        OutputHelper.write(err.prefix("Brightness must be in range of 0%-100%!"));
     }
 
-    public static void throwMegaByteOutOfBounds() {
-        try {
-            throw new IllegalArgumentException(err.prefix("Megabyte value must be a positive number!"));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void ampereOutOfBounds() {
+        OutputHelper.write(err.prefix("Ampere value must be a positive number!"));
     }
 
-    public static void throwInvalidFirstCommand() {
-        try {
-            throw new IllegalArgumentException(
-                err.prefix("First command must be set initial time! Program is going to terminate!"));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void megaByteOutOfBounds() {
+        OutputHelper.write("Megabyte value must be a positive number!");
     }
 
-    public static void throwNoSuchDevice() {
-        try {
-            throw new IllegalArgumentException(err.prefix("No such device!"));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void invalidFirstCommand() {
+        OutputHelper.write("First command must be set initial time! Program is going to terminate!");
     }
 
-    public static void throwSameStatus(String status) {
-        try {
-            throw new IllegalArgumentException(
-                    String.format(err.prefix("This device is already switched %s!"), status.toLowerCase()));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void noSuchDevice() {
+        OutputHelper.write(err.prefix("No such device!"));
     }
 
-    public static void throwColorCodeOutOfBounds() {
-        try {
-            throw new IllegalArgumentException(err.prefix("Color code value must be in range of 0x0-0xFFFFFF!"));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void sameStatus(String status) {
+        OutputHelper.write(String.format(err.prefix("This device is already switched %s!"), status.toLowerCase()));
     }
 
-    public static void throwSameName() {
-        try {
-            throw new IllegalArgumentException(err.prefix("Both of the names are the same, nothing changed!"));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+    public static void colorCodeOutOfBounds() {
+        OutputHelper.write(err.prefix("Color code value must be in range of 0x0-0xFFFFFF!"));
+    }
+
+    public static void sameName() {
+        OutputHelper.write(err.prefix("Both of the names are the same, nothing changed!"));
+    }
+
+    public static void timeCannnotBeReversed() {
+        OutputHelper.write(err.prefix("Time cannot be reversed!"));
+    }
+
+    public static void timeFormatNotCorrect() {
+        OutputHelper.write(err.prefix("Time format is not correct!"));
+    }
+
+    public static void notSmartPlug() {
+        OutputHelper.write(err.prefix("This device is not a smart lamp!"));
+    }
+
+    public static void alreadyPluggedOut() {
+        OutputHelper.write(err.prefix("This plug has no item to plug out from that plug!"));
+    }
+
+    public static void alreadyPluggedIn() {
+        OutputHelper.write(err.prefix("There is already an item plugged in to that plug!"));
+    }
+
+    public static void notSmartLamp() {
+        OutputHelper.write(err.prefix("This device is not a smart lamp!"));
+    }
+
+    public static void notSmartColorLamp() {
+        OutputHelper.write(err.prefix("This device is not a smart color lamp!"));
     }
 }
