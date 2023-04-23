@@ -1,6 +1,15 @@
 import java.util.HashMap;
 
+/**
+ * This class is responsible for checking the validity of arguments provided by Add commands. Sets the validArgs to
+ * object that contains arguments that were checked for the validity.
+ */
 public class CheckArgumentValidity {
+
+    /**
+     * Lets other classes to reach the latest valid arguments that were set by this class.
+     * @return valid arguments
+     */
     public ValidArgs getValidArgs() {
         return validArgs;
     }
@@ -8,6 +17,11 @@ public class CheckArgumentValidity {
     private final HashMap<String, SmartDevice> smartDevices;
     private ValidArgs validArgs;
 
+    /**
+     * Constructor of the class. Sets HashMap provided to its smartDevices variable. This is done in order to check for
+     * noSuchDevice exception.
+     * @param smartDevices Smart Device HashMap in the Smart System.
+     */
     public CheckArgumentValidity(HashMap<String, SmartDevice> smartDevices) {
         this.smartDevices = smartDevices;
 
@@ -20,6 +34,9 @@ public class CheckArgumentValidity {
     private int kelvinVal, brightness, hexCode;
     private String[] currentCommand;
 
+    /**
+     * Sets the boolean values for the Camera.
+     */
     public void setCameraBools() {
         setNameBool();
         if (currentCommand.length > 3) {
@@ -31,6 +48,12 @@ public class CheckArgumentValidity {
             statusIsValid = initStatus.equals("On") || initStatus.equals("Off");
         }
     }
+
+    /**
+     * Checks for the validity of the arguments according to the boolean values that were set previously. Throws
+     * exceptions according to the invalid arguments.
+     * @return true if arguments are valid else false.
+     */
     public boolean cameraIsValid() {
         allArgsValid = true;
         setCameraBools();
@@ -58,15 +81,23 @@ public class CheckArgumentValidity {
                     validArgs = new CameraValidArgs(deviceName, initStatus, megaBytePerMinute);
                 break;
             default:
+                ThrowException.erroneousCommand();
                 allArgsValid = false;
         }
         return allArgsValid;
     }
 
+    /**
+     * Sets boolean values for name of the device.
+     */
     public void setNameBool() {
         deviceName = currentCommand[2];
         nameIsValid = !smartDevices.containsKey(deviceName);
     }
+
+    /**
+     * Sets boolean values for Plug specific arguments.
+     */
     public void setPlugBools() {
         setNameBool();
         if (currentCommand.length > 3) {
@@ -78,6 +109,12 @@ public class CheckArgumentValidity {
             ampereIsValid = ampereVal > 0.0;
         }
     }
+
+    /**
+     * Checks for the validity of the arguments according to the boolean values that were set previously. Throws
+     * exceptions according to the invalid arguments.
+     * @return true if arguments are valid else false.
+     */
     public boolean plugIsValid() {
         allArgsValid = true;
         setPlugBools();
@@ -113,11 +150,16 @@ public class CheckArgumentValidity {
                     validArgs = new PlugValidArgs(deviceName, initStatus, ampereVal);
                 break;
             default:
+                ThrowException.erroneousCommand();
                 allArgsValid = false;
         }
         return allArgsValid;
     }
 
+    /**
+     * Sets boolean values for Lamp specific arguments.
+     * @throws NumberFormatException When setting brightness or kelvin values fail.
+     */
     public void setLampBools() throws NumberFormatException{
         setNameBool();
         if (currentCommand.length > 3) {
@@ -132,6 +174,11 @@ public class CheckArgumentValidity {
         }
     }
 
+    /**
+     * Checks for the validity of the arguments according to the boolean values that were set previously. Throws
+     * exceptions according to the invalid arguments.
+     * @return true if arguments are valid else false.
+     */
     public boolean lampIsValid() {
         allArgsValid = true;
         setLampBools();
@@ -143,7 +190,9 @@ public class CheckArgumentValidity {
         return allArgsValid;
     }
 
-
+    /**
+     * This piece of code is turned into a method for code reuse.
+     */
     public void lampHelper1() {
         switch (currentCommand.length) {
             case 3:
@@ -167,9 +216,13 @@ public class CheckArgumentValidity {
                 break;
             default:
                 allArgsValid = false;
+                ThrowException.erroneousCommand();
         }
     }
 
+    /**
+     * This piece of code is turned into method for code reuse.
+     */
     public void lampHelper2() {
         if (!nameIsValid || !statusIsValid || !kelvinIsValid || !brightnessIsValid) {
             if (!kelvinIsValid)
@@ -225,11 +278,20 @@ public class CheckArgumentValidity {
         return allArgsValid;
     }
 
+    /**
+     * Sets the current command in the system to check for the validity of the arguments.
+     * @param currentCommand
+     */
     public void setCurrentCommand(String[] currentCommand) {
         this.currentCommand = currentCommand;
     }
 }
 
+/**
+ * Parent class of all other valid argument classes. When system decides to create and object, it typecasts this in
+ * order to reach device specific arguments. The fields of these classes are not set to private as they are just carrier
+ * classes that are used to carry information from one class to another.
+ */
 class ValidArgs {
     int argNum;
     String name;
@@ -245,6 +307,10 @@ class ValidArgs {
         this.argNum = 2;
     }
 }
+
+/**
+ * Subclass of ValidArgs. Holds arguments that are specific to Smart Plug.
+ */
 class PlugValidArgs extends ValidArgs{
     double ampereVal;
     public PlugValidArgs(String name) {
@@ -262,6 +328,9 @@ class PlugValidArgs extends ValidArgs{
     }
 }
 
+/**
+ * Subclass of ValidArgs. Holds arguments that are specific to Smart Camera.
+ */
 class CameraValidArgs extends ValidArgs {
     double megaBytePerMinute;
     public CameraValidArgs(String name, double megaBytePerMinute) {
@@ -277,6 +346,9 @@ class CameraValidArgs extends ValidArgs {
     }
 }
 
+/**
+ * Subclass of ValidArgs. Holds arguments that are specific to Smart Lamp.
+ */
 class LampValidArgs extends ValidArgs {
     int kelvinVal;
     int brightness;

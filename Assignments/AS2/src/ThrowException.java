@@ -1,3 +1,7 @@
+/**
+ * The class that is responsible for outputting the error info of exceptions occurred during the execution of the
+ * program. Program handles exceptions by calling the static methods of this class.
+ */
 public class ThrowException {
     private static final Printable err = s -> "ERROR: " + s;
 
@@ -22,11 +26,11 @@ public class ThrowException {
     }
 
     public static void megaByteOutOfBounds() {
-        OutputHelper.write("Megabyte value must be a positive number!");
+        OutputHelper.write(err.prefix("Megabyte value must be a positive number!"));
     }
 
     public static void invalidFirstCommand() {
-        OutputHelper.write("First command must be set initial time! Program is going to terminate!");
+        OutputHelper.write(err.prefix("First command must be set initial time! Program is going to terminate!"));
     }
 
     public static void noSuchDevice() {
@@ -45,7 +49,7 @@ public class ThrowException {
         OutputHelper.write(err.prefix("Both of the names are the same, nothing changed!"));
     }
 
-    public static void timeCannnotBeReversed() {
+    public static void timeCannotBeReversed() {
         OutputHelper.write(err.prefix("Time cannot be reversed!"));
     }
 
@@ -71,5 +75,26 @@ public class ThrowException {
 
     public static void notSmartColorLamp() {
         OutputHelper.write(err.prefix("This device is not a smart color lamp!"));
+    }
+
+    public static void nothingToSwitch() {
+        OutputHelper.write(err.prefix("There is nothing to switch!"));
+    }
+
+    public static void initialFormatWrong() {
+        OutputHelper.write(err.prefix("Format of the initial date is wrong! Program is going to terminate!"));
+    }
+
+    public static void nothingToSkip() {
+        OutputHelper.write(err.prefix("There is nothing to skip!"));
+    }
+
+    public static void nothingToChange() {
+        OutputHelper.write(err.prefix("There is nothing to change!"));
+    }
+
+    public static void switchTimeInPast() {
+        OutputHelper.write(err.prefix("Switch time cannot be in the past!"));
+
     }
 }
