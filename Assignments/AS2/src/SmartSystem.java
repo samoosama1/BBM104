@@ -41,7 +41,7 @@ public class SmartSystem {
             inputArr.add(rowArray);
         }
     }
-
+    
     /**
      * Main loop of the system. Iterates over the command arrays that were created during construction of SmartSystem.
      * Sets the command keyword and calls functionSelector in order to call relevant functions according to the
