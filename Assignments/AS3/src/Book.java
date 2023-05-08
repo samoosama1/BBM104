@@ -1,5 +1,5 @@
 public abstract class Book {
-    private int ID;
+    private final int ID;
     private final boolean isBorrowable;
     private final boolean isReadableByStudents;
 

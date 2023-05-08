@@ -1,6 +1,6 @@
 public class LendInfo {
-    private int bookID;
-    private String lendStr;
+    private final int bookID;
+    private final String lendStr;
 
     public int getBookID() {
         return bookID;

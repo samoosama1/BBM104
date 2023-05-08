@@ -55,30 +55,30 @@ public class Library {
         Member member = memberMap.get(memberID);
         if (bookMap.get(bookID) != null && bookMap.get(bookID).isBorrowable()) {
             if (member.canBorrow()) {
-                member.borrowBook(bookMap.get(bookID), borrowDate);
+                member.borrowBook(bookMap.replace(bookID, null), borrowDate);
                 String out = String.format("The book [%d] was borrowed by member [%d] at %s",
                         bookID, memberID, DateTimeFormatter.ofPattern("yyyy-MM-dd").format(borrowDate));
                 borrowInfos.add(new LendInfo(bookID, out));
                 FileOutput.writeToFile(outPath, out, true, true);
             }
             else
-                FileOutput.writeToFile(outPath, "You exceeded the borrowing limit!", true, true);
+                FileOutput.writeToFile(outPath, "You have exceeded the borrowing limit!", true, true);
         } else
             FileOutput.writeToFile(outPath, "You cannot borrow this book!", true, true);
     }
 
     public void returnBook(int bookID, int memberID, LocalDate returnDate) {
         Member member = memberMap.get(memberID);
-        if (member.returnBook(bookID, returnDate) != null) {
-            Book book = member.returnBook(bookID, returnDate);
-            bookMap.put(bookID, book);
+        Book book = member.returnBook(bookID, returnDate);
+        if (book != null) {
             borrowInfos.removeIf((b -> b.getBookID() == bookID));
             readInfos.removeIf((b -> b.getBookID() == bookID));
+            bookMap.put(bookID, book);
+            if (member.getFee() > 0)
+                FileOutput.writeToFile(outPath, "You must pay a penalty!", true, true);
             FileOutput.writeToFile(outPath, String.format("The book [%d] was returned by member [%d] at %s Fee: %d",
                             bookID, memberID, DateTimeFormatter.ofPattern("yyyy-MM-dd").format(returnDate), member.getFee()),
                     true, true);
-            if (member.getFee() > 0)
-                FileOutput.writeToFile(outPath, "You must pay a penalty!", true, true);
         }
         else
             FileOutput.writeToFile(outPath, "Member doesn't have the book!", true, true);
@@ -89,9 +89,13 @@ public class Library {
         if (member.canExtend(bookID) != null) {
             if (member.canExtend(bookID)) {
                 member.extendBook(bookID);
-                FileOutput.writeToFile(outPath, String.format("The deadline of the book [%d] was extended by " +
+                FileOutput.writeToFile(outPath, String.format("The deadline of book [%d] was extended by " +
                                 "member [%d] at %s", bookID, memberID,
-                                DateTimeFormatter.ofPattern("yyyy-MM-dd").format(currentDate)) , true, true);
+                                DateTimeFormatter.ofPattern("yyyy-MM-dd").format(currentDate)) ,
+                        true, true);
+                FileOutput.writeToFile(outPath, String.format("New deadline of book [%d] is %s", bookID,
+                                DateTimeFormatter.ofPattern("yyyy-MM-dd").format(member.getBookDeadline(bookID))),
+                        true, true);
                 return;
             }
         }
@@ -105,12 +109,13 @@ public class Library {
             FileOutput.writeToFile(outPath, "You can not read this book!", true, true);
             return;
         }
-        if (!book.isReadableByStudents() && member instanceof Student) {
+        if (member instanceof Student && !book.isReadableByStudents()) {
             FileOutput.writeToFile(outPath, "Students can not read handwritten books!", true, true);
             return;
         }
         String out = String.format("The book [%d] was read in library by member [%d] at %s",
                 bookID, memberID, DateTimeFormatter.ofPattern("yyyy-MM-dd").format(currentDate));
+        readInfos.add(new LendInfo(bookID, out));
         FileOutput.writeToFile(outPath, out, true, true);
         member.readInLibrary(bookMap.replace(bookID, null));
     }

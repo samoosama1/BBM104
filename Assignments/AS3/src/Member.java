@@ -50,7 +50,7 @@ public abstract class Member {
 
     public Book returnBook(int bookID, LocalDate returnDate) {
         for (int i = 0; i < borrowedBooks.length; i++) {
-            if (borrowedBooks[i].getID() == bookID) {
+            if (borrowedBooks[i] != null && borrowedBooks[i].getID() == bookID) {
                 fee = 0;
                 if (returnDate.isAfter(deadlineDates.get(bookID))) {
                     fee = calculateFee(deadlineDates.get(bookID), returnDate);
@@ -64,6 +64,10 @@ public abstract class Member {
         }
         fee = 0;
         return readBooks.remove(bookID);
+    }
+
+    public LocalDate getBookDeadline(int bookID) {
+        return deadlineDates.get(bookID);
     }
 
     public Boolean canExtend(int bookID) {

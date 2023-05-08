@@ -9,7 +9,6 @@ Created new member: Academic [id: 3]
 Created new member: Academic [id: 4]
 The book [1] was borrowed by member [1] at 2023-04-07
 You can not read this book!
-You must pay a penalty!
 The book [1] was returned by member [1] at 2023-04-15 Fee: 1
 Students can not read handwritten books!
 Created new book: Printed [id: 6]
@@ -43,4 +42,3 @@ The book [6] was borrowed by member [2] at 2023-04-15
 
 Number of books read in library: 1
 The book [3] was read in library by member [3] at 2023-04-15
-
