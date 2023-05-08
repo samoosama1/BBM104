@@ -79,7 +79,7 @@ public abstract class Member {
         extendMap.put(bookID, false);
     }
 
-    public long calculateFee(LocalDate borrowDate, LocalDate returnDate) {
-        return ChronoUnit.DAYS.between(borrowDate, returnDate);
+    public long calculateFee(LocalDate deadlineDate, LocalDate returnDate) {
+        return ChronoUnit.DAYS.between(deadlineDate, returnDate);
     }
 }
