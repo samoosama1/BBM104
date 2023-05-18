@@ -53,7 +53,12 @@ public class Library {
 
     public void borrowBook(int bookID, int memberID, LocalDate borrowDate) {
         Member member = memberMap.get(memberID);
-        if (bookMap.get(bookID) != null && bookMap.get(bookID).isBorrowable()) {
+        Book book = bookMap.get(bookID);
+        if (member == null) {
+            FileOutput.writeToFile(outPath, "There is no such member!", true, true);
+            return;
+        }
+        if (book != null && book.isBorrowable()) {
             if (member.canBorrow()) {
                 member.borrowBook(bookMap.replace(bookID, null), borrowDate);
                 String out = String.format("The book [%d] was borrowed by member [%d] at %s",
@@ -124,17 +129,21 @@ public class Library {
         StringBuilder out = new StringBuilder();
         out.append("History of library:\n\n");
         out.append(String.format("Number of students: %d\n", studentList.size()));
-        studentList.forEach((s) -> out.append(s.toString()).append("\n"));
+        printList(studentList, out);
         out.append(String.format("\nNumber of academics: %d\n", academicList.size()));
-        academicList.forEach((a) -> out.append(a.toString()).append("\n"));
+        printList(academicList, out);
         out.append(String.format("\nNumber of printed books: %d\n", printedBooks.size()));
-        printedBooks.forEach((p) -> out.append(p.toString()).append("\n"));
+        printList(printedBooks, out);
         out.append(String.format("\nNumber of handwritten books: %d\n", handwrittenBooks.size()));
-        handwrittenBooks.forEach((h) -> out.append(h.toString()).append("\n"));
+        printList(handwrittenBooks, out);
         out.append(String.format("\nNumber of borrowed books: %d\n", borrowInfos.size()));
         borrowInfos.forEach(b -> out.append(b.getLendStr()).append("\n"));
         out.append(String.format("\nNumber of books read in library: %d\n", readInfos.size()));
         readInfos.forEach(r -> out.append(r.getLendStr()).append("\n"));
         FileOutput.writeToFile(outPath, String.valueOf(out), true, true);
+    }
+
+    public void printList(List<?> listToPrint, StringBuilder out) {
+        listToPrint.forEach((T) -> out.append(T.toString()).append("\n"));
     }
 }
