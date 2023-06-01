@@ -1,4 +1,6 @@
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -22,6 +24,8 @@ public class ConfigMenu {
         Text exitText = new Text("PRESS ESC TO EXIT");
         exitText.setFont(Font.font("Arial", FontWeight.BOLD, SCALE * 8)); // Set the font and size as desired
         exitText.setFill(Color.ORANGE);
+
+        CursorManager.setInitialImage(pane);
 
         // Add the text node to the pane
         pane.getChildren().addAll(navigateText, startText, exitText);

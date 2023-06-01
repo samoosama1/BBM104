@@ -21,48 +21,12 @@ public class BackgroundManager {
     }
 
     public static void setNextBackground(Pane pane) {
-        if (listIterator.hasNext()) {
-            Background background = listIterator.next();
-            if (currentBackground == background) {
-                if (listIterator.hasNext()) {
-                    background = listIterator.next();
-                    pane.setBackground(background);
-                    currentBackground = background;
-                    return;
-                }
-            } else {
-                pane.setBackground(background);
-                currentBackground = background;
-                return;
-            }
-        }
-        while (listIterator.hasPrevious()) {
-            listIterator.previous();
-        }
-        currentBackground = listIterator.next();
+        currentBackground = IteratorHelper.getNext(listIterator, currentBackground);
         pane.setBackground(currentBackground);
     }
 
     public static void setPrevBackground(Pane pane) {
-        if (listIterator.hasPrevious()) {
-            Background background = listIterator.previous();
-            if (currentBackground == background) {
-                if (listIterator.hasPrevious()) {
-                    background = listIterator.previous();
-                    pane.setBackground(background);
-                    currentBackground = background;
-                    return;
-                }
-            } else {
-                pane.setBackground(background);
-                currentBackground = background;
-                return;
-            }
-        }
-        while (listIterator.hasNext()) {
-            listIterator.next();
-        }
-        currentBackground = listIterator.previous();
+        currentBackground = IteratorHelper.getPrev(listIterator, currentBackground);
         pane.setBackground(currentBackground);
     }
 

@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class Main extends Application {
-    public static final int SCALE = 4;
+    public static final int SCALE = 3;
     AudioClip titleTheme = new AudioClip(new File("assets/effects/Title.mp3").toURI().toString());
     AudioClip introTheme = new AudioClip(new File("assets/effects/Intro.mp3").toURI().toString());
     AudioClip duckFall = new AudioClip(new File("assets/effects/DuckFalls.mp3").toURI().toString());
@@ -39,37 +39,24 @@ public class Main extends Application {
         });
 
         // Create the scene and set the pane as its root
-        configMenu.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if (key.getCode() == KeyCode.ENTER){
-                SoundPlayer.stopSound(titleTheme);
-                SoundPlayer.playSound(introTheme);
-                while (introTheme.isPlaying()) {
-                    assert true;
-                }
-                System.out.println("yes.");
-            } else if (key.getCode() == KeyCode.ESCAPE) {
-                window.setScene(mainMenu);
-            } else if (key.getCode() == KeyCode.RIGHT) {
-                System.out.println("you pressed right");
-            } else if (key.getCode() == KeyCode.LEFT) {
-                System.out.println("you pressed left");
-            }  else if (key.getCode() == KeyCode.UP) {
-                System.out.println("you pressed up");
-            }  else if (key.getCode() == KeyCode.DOWN) {
-                System.out.println("you pressed down");
-            }
-        });
-
         configMenu.setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case ENTER:
+                    SoundPlayer.stopSound(titleTheme);
+                    SoundPlayer.playSound(introTheme);
+                    while (introTheme.isPlaying()) {
+                        assert true;
+                    }
+                    System.out.println("yes.");
                     break;
                 case ESCAPE:
+                    window.setScene(mainMenu);
                     break;
                 case UP:
-
+                    CursorManager.setNextImage((Pane) configMenu.getRoot());
                     break;
                 case DOWN:
+                    CursorManager.setPrevImage((Pane) configMenu.getRoot());
                     break;
                 case LEFT:
                     BackgroundManager.setPrevBackground((Pane) configMenu.getRoot());
