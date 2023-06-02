@@ -40,10 +40,12 @@ public class ConfigMenu {
             switch (event.getCode()) {
                 case ENTER:
                     SoundPlayer.stopSound(SoundPlayer.titleTheme);
-//                    SoundPlayer.playSound(SoundPlayer.introTheme);
-//                    while (SoundPlayer.introTheme.isPlaying()) {
-//                        assert true;
-//                    }
+                    SoundPlayer.playSound(SoundPlayer.introTheme);
+                    while (SoundPlayer.introTheme.isPlaying()) {
+                        assert true;
+                    }
+                    Level1.setBackground();
+                    Level1.setForeground();
                     window.setScene(Level1.level);
                     break;
                 case ESCAPE:
@@ -59,11 +61,9 @@ public class ConfigMenu {
                     break;
                 case LEFT:
                     BackgroundManager.setPrevBackground((Pane) configMenu.getRoot());
-                    Level1.setBackground();
                     break;
                 case RIGHT:
                     BackgroundManager.setNextBackground((Pane) configMenu.getRoot());
-                    Level1.setBackground();
                     break;
             }
         });

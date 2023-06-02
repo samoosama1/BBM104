@@ -1,3 +1,5 @@
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -10,6 +12,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class MainMenu {
     public static Scene mainMenu;
@@ -35,13 +38,18 @@ public class MainMenu {
 
         Text startText = new Text("PRESS ENTER TO START");
         startText.setFont(Font.font("Arial", FontWeight.BOLD, Main.SCALE * 16)); // Set the font and size as desired
-        startText.setFill(Color.ORANGE);
         startText.setTranslateY(Main.SCALE * 48);
+        startText.setFill(Color.ORANGE);
 
         Text exitText = new Text("PRESS ESC TO EXIT");
         exitText.setFont(Font.font("Arial", FontWeight.BOLD, Main.SCALE * 16)); // Set the font and size as desired
         exitText.setFill(Color.ORANGE);
         exitText.setTranslateY(Main.SCALE * 48);
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.75 * 2), event -> startText.setFill(Color.ORANGE)),
+                new KeyFrame(Duration.seconds(0.75), event -> { startText.setFill(Color.TRANSPARENT); }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
 
         // Add the text node to the root
         root.getChildren().addAll(startText, exitText);

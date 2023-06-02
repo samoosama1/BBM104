@@ -11,12 +11,10 @@ public class SoundPlayer {
     public static AudioClip gunshot = new AudioClip(new File("assets/effects/Gunshot.mp3").toURI().toString());
 
     public static void playSound(AudioClip sound) {
-        if (!sound.isPlaying())
             sound.play();
     }
 
     public static void stopSound(AudioClip sound) {
-        if (sound.isPlaying())
             sound.stop();
     }
 }
