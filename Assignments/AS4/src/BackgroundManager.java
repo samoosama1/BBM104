@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class BackgroundManager {
-    private static List<Background> backgroundList = new LinkedList<>();
+    private static final List<Background> backgroundList = new LinkedList<>();
     private static final ListIterator<Background> listIterator;
     private static Background currentBackground;
     static {
@@ -30,7 +30,7 @@ public class BackgroundManager {
         pane.setBackground(currentBackground);
     }
 
-    public static void setInitialBackground(Pane pane) {
+    public static void setCurrentBackground(Pane pane) {
         pane.setBackground(currentBackground);
     }
 }

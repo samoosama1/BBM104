@@ -1,9 +1,7 @@
-import javafx.geometry.Pos;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ public class CursorManager {
         for (int i = 0; i < 7; i++) {
             Image image = new Image(String.format("assets/crosshair/%d.png", i+1));
             ImageView imageView = new ImageView(image);
-            imageView.setTranslateY((double) 240 * Main.SCALE / 2);
+            imageView.setTranslateY((double) 180 * Main.SCALE / 2);
             imageView.setFitWidth(10 * Main.SCALE);
             imageView.setFitHeight(10 * Main.SCALE);
             ImageCursor imageCursor = new ImageCursor(image);
@@ -45,21 +43,21 @@ public class CursorManager {
         scene.setCursor(currentCursor);
     }
 
-    public static void setInitialCursor(Scene scene) {
+    public static void setCurrentCursor(Scene scene) {
         scene.setCursor(currentCursor);
     }
 
-    public static void setInitialImage(Pane pane) {
+    public static void setCurrentImage(Pane pane) {
         pane.getChildren().add(currentImage);
     }
 
     public static void setNextImage(Pane pane) {
         currentImage = IteratorHelper.getNext(imageIterator, currentImage);
-        pane.getChildren().set(0, currentImage);
+        pane.getChildren().set(pane.getChildren().size() - 1, currentImage);
     }
 
     public static void setPrevImage(Pane pane) {
         currentImage = IteratorHelper.getPrev(imageIterator, currentImage);
-        pane.getChildren().set(0, currentImage);
+        pane.getChildren().set(pane.getChildren().size() - 1, currentImage);
     }
 }
