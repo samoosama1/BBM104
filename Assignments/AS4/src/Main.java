@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -15,9 +16,11 @@ public class Main extends Application {
 
         MainMenu.addEventHandler(window);
         ConfigMenu.addEventHandler(window);
-        Level1.addEventHandlers();
+        Level1.addEventHandlers(window);
 
         window.setScene(MainMenu.mainMenu);
+        window.setTitle("HUBMM DuckHunt");
+        window.getIcons().add(new Image("assets/favicon/1.png"));
         window.show();
     }
 

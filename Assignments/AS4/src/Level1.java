@@ -1,108 +1,112 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
+import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Level1 {
-    public static List<Duck> duckList = new ArrayList<>();
+public class Level1 extends Level{
+    public static Duck duck;
     public static Scene level;
     public static int numOfBullets = 6;
+    public static Timeline flyingAnimation;
+    public static Timeline dyingAnimation;
+    public static Timeline flyingMovement;
+    public static Timeline fallingMovement;
+    private static boolean enableMouseClick = true;
+    private static boolean enableEnter = false;
+
     static {
         Scale mirrorScale = new Scale(-1, 1);
 
         Pane root = new Pane();
-        Duck duck1 = new Duck(200, 100, 2, 0, "Walter White");
-        Duck duck2 = new Duck(200, 150, -2, 0, "Jesse Pinkman");
+        duck = new Duck(200, 100, 1, 0);
 
-        duck2.getImageView().getTransforms().add(mirrorScale);
-        duck2.getImageView().setTranslateX(31 * Main.SCALE);
+        flyingAnimation = new Timeline(
+                new KeyFrame(Duration.seconds(0.2), event -> duck.getImageView().setImage(Duck.blackDuckImages.get(3))),
+                new KeyFrame(Duration.seconds(0.4), event -> duck.getImageView().setImage(Duck.blackDuckImages.get(4))),
+                new KeyFrame(Duration.seconds(0.6), event -> duck.getImageView().setImage(Duck.blackDuckImages.get(5))));
+        flyingAnimation.setCycleCount(Timeline.INDEFINITE);
+        flyingAnimation.play();
 
-        duckList.add(duck1);
-        duckList.add(duck2);
+        flyingMovement = new Timeline(new KeyFrame(new Duration(16), event -> {
+            duck.setDuckX(duck.getDuckX() + duck.getDeltaX());
+            duck.setDuckY(duck.getDuckY() + duck.getFlyingDeltaY());
 
-        Timeline animation = new Timeline(new KeyFrame(Duration.seconds(0.2), event -> {
-            for (Duck duck : duckList) {
-                duck.getImageView().setImage(Duck.blackDuckImages.get(3));
+            if (duck.getDuckX() <= 0 || Main.WIDTH - duck.getDuckX() <= DuckMaker.HITBOX_SIZE) {
+                duck.setDeltaX(duck.getDeltaX() * -1);
+                if (duck.getImageView().getTransforms().isEmpty()) {
+                    duck.getImageView().getTransforms().add(0, mirrorScale);
+                    duck.getImageView().setTranslateX(Duck.DUCK_WIDTH);
+                } else {
+                    duck.getImageView().getTransforms().remove(0);
+                    duck.getImageView().setTranslateX(0);
+                }
             }
-        }),
-                new KeyFrame(Duration.seconds(0.4), event -> {
-                    for (Duck duck : duckList) {
-                        duck.getImageView().setImage(Duck.blackDuckImages.get(4));
-                    }
-                }),
-                new KeyFrame(Duration.seconds(0.6), event -> {
-                    for (Duck duck : duckList) {
-                        duck.getImageView().setImage(Duck.blackDuckImages.get(5));
-                    }
+            duck.getHitbox().setTranslateX(duck.getDuckX());
+        }));
+        flyingMovement.setCycleCount(Timeline.INDEFINITE);
+        flyingMovement.play();
+
+        dyingAnimation = new Timeline(
+                new KeyFrame(Duration.ZERO, event -> duck.getImageView().setImage(Duck.blackDuckImages.get(6))),
+                new KeyFrame(Duration.seconds(0.3), event -> {
+                    duck.getImageView().setImage(Duck.blackDuckImages.get(7));
+                    fallingMovement.play();
                 }));
 
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.play();
-
-
-        Timeline movement = new Timeline(new KeyFrame(new Duration(16), event -> {
-            for (Duck duck : duckList) {
-                duck.setDuckX(duck.getDuckX() + duck.getDeltaX());
-                duck.setDuckY(duck.getDuckY() + duck.getDeltaY());
-
-                if (duck.getDuckX() <= 0 || Main.WIDTH - duck.getDuckX() <= Duck.DUCK_WIDTH) {
-                    duck.setDeltaX(duck.getDeltaX() * -1);
-                    if (duck.getImageView().getTransforms().isEmpty()) {
-                        duck.getImageView().getTransforms().add(0, mirrorScale);
-                        duck.getImageView().setTranslateX(Duck.DUCK_WIDTH);
-                    } else {
-                        duck.getImageView().getTransforms().remove(0);
-                        duck.getImageView().setTranslateX(0);
-
+        fallingMovement = new Timeline(
+                new KeyFrame(Duration.millis(16), event -> {
+                    duck.setDuckY(duck.getDuckY() + duck.getFallingDeltaY());
+                    if (Main.HEIGHT - duck.getHitbox().getTranslateY() <= DuckMaker.HITBOX_SIZE) {
+                        fallingMovement.stop();
                     }
-                }
-                duck.getHitbox().setTranslateX(duck.getDuckX());
-            }
-        }));
-        movement.setCycleCount(Timeline.INDEFINITE);
-        movement.play();
 
-        for (Duck duck : duckList) {
-            root.getChildren().add(duck.getHitbox());
-        }
+                    duck.getHitbox().setTranslateY(duck.getDuckY());
+                })
+        );
+        fallingMovement.setCycleCount(Timeline.INDEFINITE);
+
+        root.getChildren().add(duck.getHitbox());
 
         level = new Scene(root, Main.WIDTH, Main.HEIGHT);
         CursorManager.setCurrentCursor(level);
     }
 
-    public static void addEventHandlers() {
+    public static void addEventHandlers(Stage window) {
         level.setOnMouseClicked(event -> {
-            SoundPlayer.playSound(SoundPlayer.gunshot);
-            numOfBullets--;
+            if (enableMouseClick) {
+                SoundPlayer.playSound(SoundPlayer.gunshot);
+                numOfBullets--;
 
-            double clickX = event.getX();
-            double clickY = event.getY();
+                double clickX = event.getX();
+                double clickY = event.getY();
 
-            Pane pane = (Pane) level.getRoot();
-            for (Duck duck : duckList) {
                 Pane hitbox = duck.getHitbox();
                 if (clickX >= hitbox.getTranslateX() && clickX <= hitbox.getTranslateX() + DuckMaker.HITBOX_SIZE &&
-                clickY >= hitbox.getTranslateY() && clickY <= hitbox.getTranslateY() + DuckMaker.HITBOX_SIZE) {
-                    pane.getChildren().remove(duck.getHitbox());
+                        clickY >= hitbox.getTranslateY() && clickY <= hitbox.getTranslateY() + DuckMaker.HITBOX_SIZE) {
+                    enableMouseClick = false;
+                    enableEnter = true;
+                    SoundPlayer.playSound(SoundPlayer.duckFall);
+                    flyingAnimation.stop();
+                    flyingMovement.stop();
+                    dyingAnimation.play();
+                    SoundPlayer.playSound(SoundPlayer.levelComplete);
+                } else if (numOfBullets == 0) {
+                    enableMouseClick = false;
+                    SoundPlayer.playSound(SoundPlayer.gameOver);
                 }
             }
         });
-    }
 
-    public static void setBackground() {
-        Pane root = (Pane) level.getRoot();
-        BackgroundManager.setCurrentBackground(root);
-    }
-
-    public static void setForeground() {
-        Pane root = (Pane) level.getRoot();
-        BackgroundManager.setCurrentForeground(root);
+        level.setOnKeyPressed(event1 -> {
+            if (enableEnter) {
+                if (event1.getCode() == KeyCode.ENTER) {
+                    window.setScene(MainMenu.mainMenu);
+                }
+            }
+        });
     }
 }

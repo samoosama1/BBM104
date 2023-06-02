@@ -10,13 +10,14 @@ public class Duck {
     public static ArrayList<Image> blackDuckImages = new ArrayList<>();
     public static ArrayList<Image> blueDuckImages = new ArrayList<>();
     public static ArrayList<Image> redDuckImages = new ArrayList<>();
-    private int duckX;
-    private int duckY;
-    private int deltaX;
-    private int deltaY;
+
+    private double duckX;
+    private double duckY;
+    private double flyingDeltaX;
+    private double flyingDeltaY;
+    private final double fallingDeltaY = 1 * Main.SCALE;
     private ImageView imageView = DuckMaker.makeImageView();
     private final Pane hitbox = DuckMaker.makeHitbox(imageView);
-    private final String name;
 
     static {
         for (int i = 0; i < 8; i++) {
@@ -35,29 +36,32 @@ public class Duck {
         }
     }
 
-    public Duck(int duckX, int duckY, int deltaX, int deltaY, String name) {
-        this.name = name;
+    public Duck(int duckX, int duckY, double deltaX, double deltaY) {
         this.duckX = duckX;
         this.duckY = duckY;
-        this.deltaX = deltaX;
-        this.deltaY = deltaY;
+        this. flyingDeltaX = deltaX * Main.SCALE;
+        this.flyingDeltaY = deltaY * Main.SCALE;
         hitbox.setTranslateX(duckX);
         hitbox.setTranslateY(duckY);
     }
 
-    public int getDuckX() {
+    public double getFallingDeltaY() {
+        return fallingDeltaY;
+    }
+
+    public double getDuckX() {
         return duckX;
     }
 
-    public void setDuckX(int duckX) {
+    public void setDuckX(double duckX) {
         this.duckX = duckX;
     }
 
-    public int getDuckY() {
+    public double getDuckY() {
         return duckY;
     }
 
-    public void setDuckY(int duckY) {
+    public void setDuckY(double duckY) {
         this.duckY = duckY;
     }
 
@@ -65,20 +69,20 @@ public class Duck {
         return hitbox;
     }
 
-    public int getDeltaX() {
-        return deltaX;
+    public double getDeltaX() {
+        return  flyingDeltaX;
     }
 
-    public void setDeltaX(int deltaX) {
-        this.deltaX = deltaX;
+    public void setDeltaX(double deltaX) {
+        this. flyingDeltaX = deltaX;
     }
 
-    public int getDeltaY() {
-        return deltaY;
+    public double getFlyingDeltaY() {
+        return flyingDeltaY;
     }
 
-    public void setDeltaY(int deltaY) {
-        this.deltaY = deltaY;
+    public void setFlyingDeltaY(double flyingDeltaY) {
+        this.flyingDeltaY = flyingDeltaY;
     }
 
     public ImageView getImageView() {
@@ -89,7 +93,4 @@ public class Duck {
         this.imageView = imageView;
     }
 
-    public String toString() {
-        return name;
-    }
 }

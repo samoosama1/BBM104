@@ -32,7 +32,7 @@ public class ConfigMenu {
         pane.getChildren().addAll(navigateText, startText, exitText);
         CursorManager.setCurrentImage(pane);
 
-        configMenu = new Scene(pane, Main.SCALE * 256, Main.SCALE * 240);
+        configMenu = new Scene(pane, Main.WIDTH, Main.HEIGHT);
     }
 
     public static void addEventHandler(Stage window) {
@@ -40,12 +40,12 @@ public class ConfigMenu {
             switch (event.getCode()) {
                 case ENTER:
                     SoundPlayer.stopSound(SoundPlayer.titleTheme);
-                    SoundPlayer.playSound(SoundPlayer.introTheme);
-                    while (SoundPlayer.introTheme.isPlaying()) {
-                        assert true;
-                    }
-                    Level1.setBackground();
-                    Level1.setForeground();
+//                    SoundPlayer.playSound(SoundPlayer.introTheme);
+//                    while (SoundPlayer.introTheme.isPlaying()) {
+//                        assert true;
+//                    }
+                    Level1.setBackground(Level1.level);
+                    Level1.setForeground(Level1.level);
                     window.setScene(Level1.level);
                     break;
                 case ESCAPE:
