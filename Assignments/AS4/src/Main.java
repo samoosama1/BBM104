@@ -17,6 +17,7 @@ public class Main extends Application {
         MainMenu.addEventHandler(window);
         ConfigMenu.addEventHandler(window);
         Level1.addEventHandlers(window);
+        Level2.addEventHandlers(window);
 
         window.setScene(MainMenu.mainMenu);
         window.setTitle("HUBMM DuckHunt");

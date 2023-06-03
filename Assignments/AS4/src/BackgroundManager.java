@@ -31,7 +31,6 @@ public class BackgroundManager {
         }
         foregroundIterator = foregroundList.listIterator();
         currentForeground = foregroundIterator.next();
-
     }
 
     public static void setNextBackground(Pane pane) {

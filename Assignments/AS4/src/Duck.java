@@ -36,7 +36,7 @@ public class Duck {
         }
     }
 
-    public Duck(int duckX, int duckY, double deltaX, double deltaY) {
+    public Duck(double duckX, double duckY, double deltaX, double deltaY) {
         this.duckX = duckX;
         this.duckY = duckY;
         this. flyingDeltaX = deltaX * Main.SCALE;

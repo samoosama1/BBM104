@@ -4,25 +4,38 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Scale;
-import javafx.util.Duration;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
-public class Level1 extends Level{
+public class Level2 {
+    public static Scale UP_LEFT = new Scale(-1, 1);
+    public static Scale DOWN_LEFT = new Scale(-1, -1);
+    public static Scale UP_RIGHT = new Scale(1, 1);
+    public static Scale DOWN_RIGHT = new Scale(1, -1);
     public static Duck duck;
-    public static Scene level;
     public static Timeline flyingAnimation;
-    public static Timeline dyingAnimation;
     public static Timeline flyingMovement;
+    public static Timeline dyingAnimation;
     public static Timeline fallingMovement;
+    public static Scene level;
     private static int numOfBullets = 3;
     private static boolean enableMouseClick = true;
     private static boolean enableEnter = false;
 
     static {
-        Scale mirrorScale = new Scale(-1, 1);
+        UP_RIGHT.setPivotX(Duck.DUCK_WIDTH * 0.5);
+        DOWN_LEFT.setPivotX(Duck.DUCK_WIDTH * 0.5);
+        UP_LEFT.setPivotX(Duck.DUCK_WIDTH * 0.5);
+        DOWN_RIGHT.setPivotX(Duck.DUCK_WIDTH * 0.5);
+
+        UP_RIGHT.setPivotY(Duck.DUCK_HEIGHT * 0.5);
+        DOWN_LEFT.setPivotY(Duck.DUCK_HEIGHT * 0.5);
+        UP_LEFT.setPivotY(Duck.DUCK_HEIGHT * 0.5);
+        DOWN_RIGHT.setPivotY(Duck.DUCK_HEIGHT * 0.5);
 
         Pane root = new Pane();
-        duck = new Duck(200, 100, 1, 0);
+        duck = new Duck(Main.WIDTH * 0.5, Main.HEIGHT * 0.5, 1, -1);
+        duck.getImageView().getTransforms().add(UP_RIGHT);
 
         flyingAnimation = new Timeline(
                 new KeyFrame(Duration.seconds(0.2), event -> duck.getImageView().setImage(Duck.blackDuckImages.get(3))),
@@ -37,15 +50,31 @@ public class Level1 extends Level{
 
             if (duck.getDuckX() <= 0 || Main.WIDTH - duck.getDuckX() <= DuckMaker.HITBOX_SIZE) {
                 duck.setDeltaX(duck.getDeltaX() * -1);
-                if (duck.getImageView().getTransforms().isEmpty()) {
-                    duck.getImageView().getTransforms().add(0, mirrorScale);
-                    duck.getImageView().setTranslateX(Duck.DUCK_WIDTH);
+                if (duck.getDeltaX() > 0 && duck.getFlyingDeltaY() < 0) {
+                    duck.getImageView().getTransforms().set(0, UP_RIGHT);
+                } else if (duck.getDeltaX() > 0 && duck.getFlyingDeltaY() > 0) {
+                    duck.getImageView().getTransforms().set(0, DOWN_RIGHT);
+                } else if (duck.getDeltaX() < 0 && duck.getFlyingDeltaY() < 0) {
+                    duck.getImageView().getTransforms().set(0, UP_LEFT);
                 } else {
-                    duck.getImageView().getTransforms().remove(0);
-                    duck.getImageView().setTranslateX(0);
+                    duck.getImageView().getTransforms().set(0, DOWN_LEFT);
+                }
+            }
+
+            if (duck.getDuckY() <= 0 || Main.HEIGHT - duck.getDuckY() <= DuckMaker.HITBOX_SIZE) {
+                duck.setFlyingDeltaY(duck.getFlyingDeltaY() * -1);
+                if (duck.getDeltaX() > 0 && duck.getFlyingDeltaY() < 0) {
+                    duck.getImageView().getTransforms().set(0, UP_RIGHT);
+                } else if (duck.getDeltaX() > 0 && duck.getFlyingDeltaY() > 0) {
+                    duck.getImageView().getTransforms().set(0, DOWN_RIGHT);
+                } else if (duck.getDeltaX() < 0 && duck.getFlyingDeltaY() < 0) {
+                    duck.getImageView().getTransforms().set(0, UP_LEFT);
+                } else {
+                    duck.getImageView().getTransforms().set(0, DOWN_LEFT);
                 }
             }
             duck.getHitbox().setTranslateX(duck.getDuckX());
+            duck.getHitbox().setTranslateY(duck.getDuckY());
         }));
         flyingMovement.setCycleCount(Timeline.INDEFINITE);
         flyingMovement.play();
@@ -63,7 +92,6 @@ public class Level1 extends Level{
                     if (Main.HEIGHT - duck.getHitbox().getTranslateY() <= DuckMaker.HITBOX_SIZE) {
                         fallingMovement.stop();
                     }
-
                     duck.getHitbox().setTranslateY(duck.getDuckY());
                 })
         );
@@ -105,7 +133,6 @@ public class Level1 extends Level{
             if (enableEnter) {
                 if (event1.getCode() == KeyCode.ENTER) {
                     SoundPlayer.stopSound(SoundPlayer.levelComplete);
-                    window.setScene(Level2.level);
                 }
             }
         });
