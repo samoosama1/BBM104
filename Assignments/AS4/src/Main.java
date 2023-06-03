@@ -13,16 +13,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
-
-        MainMenu.addEventHandler(window);
-        ConfigMenu.addEventHandler(window);
-        Level1.addEventHandlers(window);
-        Level2.addEventHandlers(window);
-
-        window.setScene(MainMenu.mainMenu);
-        window.setTitle("HUBMM DuckHunt");
-        window.getIcons().add(new Image("assets/favicon/1.png"));
-        window.show();
+        Game game = new Game();
+        game.startGame(window);
     }
-
 }

@@ -15,9 +15,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class MainMenu {
-    public static Scene mainMenu;
+    private Scene mainMenu;
 
-    static {
+    public MainMenu(Stage window) {
         SoundPlayer.titleTheme.setCycleCount(AudioClip.INDEFINITE);
         SoundPlayer.playSound(SoundPlayer.titleTheme);
 
@@ -55,15 +55,18 @@ public class MainMenu {
         root.getChildren().addAll(startText, exitText);
 
         mainMenu = new Scene(root, Main.SCALE * 256, Main.SCALE * 240);
-    }
 
-    public static void addEventHandler(Stage window) {
         mainMenu.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if (key.getCode() == KeyCode.ENTER){
-                window.setScene(ConfigMenu.configMenu);
+                ConfigMenu configMenu = new ConfigMenu(window);
+                window.setScene(configMenu.getConfigMenu());
             } else if (key.getCode() == KeyCode.ESCAPE) {
                 System.exit(1);
             }
         });
+    }
+
+    public Scene getMainMenu() {
+        return mainMenu;
     }
 }

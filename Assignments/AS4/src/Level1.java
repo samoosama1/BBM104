@@ -8,17 +8,17 @@ import javafx.util.Duration;
 import javafx.stage.Stage;
 
 public class Level1 extends Level{
-    public static Duck duck;
-    public static Scene level;
-    public static Timeline flyingAnimation;
-    public static Timeline dyingAnimation;
-    public static Timeline flyingMovement;
-    public static Timeline fallingMovement;
-    private static int numOfBullets = 3;
-    private static boolean enableMouseClick = true;
-    private static boolean enableEnter = false;
+    public Duck duck;
+    private Scene level;
+    public Timeline flyingAnimation;
+    public Timeline dyingAnimation;
+    public Timeline flyingMovement;
+    public Timeline fallingMovement;
+    private int numOfBullets = 3;
+    private boolean enableMouseClick = true;
+    private boolean enableEnter = false;
 
-    static {
+    public Level1(Stage window) {
         Scale mirrorScale = new Scale(-1, 1);
 
         Pane root = new Pane();
@@ -73,9 +73,9 @@ public class Level1 extends Level{
 
         level = new Scene(root, Main.WIDTH, Main.HEIGHT);
         CursorManager.setCurrentCursor(level);
-    }
+        BackgroundManager.setCurrentBackground(root);
+        BackgroundManager.setCurrentForeground(root);
 
-    public static void addEventHandlers(Stage window) {
         level.setOnMouseClicked(event -> {
             if (enableMouseClick) {
                 SoundPlayer.playSound(SoundPlayer.gunshot);
@@ -105,9 +105,14 @@ public class Level1 extends Level{
             if (enableEnter) {
                 if (event1.getCode() == KeyCode.ENTER) {
                     SoundPlayer.stopSound(SoundPlayer.levelComplete);
-                    window.setScene(Level2.level);
+                    Level2 level2 = new Level2(window);
+                    window.setScene(level2.getLevel());
                 }
             }
         });
+    }
+
+    public Scene getLevel() {
+        return level;
     }
 }

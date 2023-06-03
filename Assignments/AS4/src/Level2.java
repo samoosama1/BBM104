@@ -3,26 +3,29 @@ import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import javax.imageio.stream.ImageInputStream;
 
 public class Level2 {
     public static Scale UP_LEFT = new Scale(-1, 1);
     public static Scale DOWN_LEFT = new Scale(-1, -1);
     public static Scale UP_RIGHT = new Scale(1, 1);
     public static Scale DOWN_RIGHT = new Scale(1, -1);
-    public static Duck duck;
-    public static Timeline flyingAnimation;
-    public static Timeline flyingMovement;
-    public static Timeline dyingAnimation;
-    public static Timeline fallingMovement;
-    public static Scene level;
-    private static int numOfBullets = 3;
-    private static boolean enableMouseClick = true;
-    private static boolean enableEnter = false;
+    private Duck duck;
+    private Timeline flyingAnimation;
+    private Timeline flyingMovement;
+    private Timeline dyingAnimation;
+    private Timeline fallingMovement;
+    private Scene level;
+    private int numOfBullets = 3;
+    private boolean enableMouseClick = true;
+    private boolean enableEnter = false;
 
-    static {
+    public Level2(Stage window) {
         UP_RIGHT.setPivotX(Duck.DUCK_WIDTH * 0.5);
         DOWN_LEFT.setPivotX(Duck.DUCK_WIDTH * 0.5);
         UP_LEFT.setPivotX(Duck.DUCK_WIDTH * 0.5);
@@ -34,6 +37,7 @@ public class Level2 {
         DOWN_RIGHT.setPivotY(Duck.DUCK_HEIGHT * 0.5);
 
         Pane root = new Pane();
+
         duck = new Duck(Main.WIDTH * 0.5, Main.HEIGHT * 0.5, 1, -1);
         duck.getImageView().getTransforms().add(UP_RIGHT);
 
@@ -100,10 +104,7 @@ public class Level2 {
         root.getChildren().add(duck.getHitbox());
 
         level = new Scene(root, Main.WIDTH, Main.HEIGHT);
-        CursorManager.setCurrentCursor(level);
-    }
 
-    public static void addEventHandlers(Stage window) {
         level.setOnMouseClicked(event -> {
             if (enableMouseClick) {
                 SoundPlayer.playSound(SoundPlayer.gunshot);
@@ -118,6 +119,7 @@ public class Level2 {
                     enableMouseClick = false;
                     enableEnter = true;
                     SoundPlayer.playSound(SoundPlayer.duckFall);
+                    duck.getImageView().getTransforms().remove(0);
                     flyingAnimation.stop();
                     flyingMovement.stop();
                     dyingAnimation.play();
@@ -133,8 +135,18 @@ public class Level2 {
             if (enableEnter) {
                 if (event1.getCode() == KeyCode.ENTER) {
                     SoundPlayer.stopSound(SoundPlayer.levelComplete);
+                    MainMenu mainMenu = new MainMenu(window);
+                    window.setScene(mainMenu.getMainMenu());
                 }
             }
         });
+
+        CursorManager.setCurrentCursor(level);
+        BackgroundManager.setCurrentBackground(root);
+        BackgroundManager.setCurrentForeground(root);
+    }
+
+    public Scene getLevel() {
+        return level;
     }
 }

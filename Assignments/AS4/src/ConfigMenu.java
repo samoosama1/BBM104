@@ -10,9 +10,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ConfigMenu {
-    public static Scene configMenu;
+    private Scene configMenu;
 
-    static {
+    public ConfigMenu(Stage window) {
         VBox pane = new VBox(Main.SCALE * 0.1);
         pane.setAlignment(Pos.TOP_CENTER);
         BackgroundManager.setCurrentBackground(pane);
@@ -33,9 +33,7 @@ public class ConfigMenu {
         CursorManager.setCurrentImage(pane);
 
         configMenu = new Scene(pane, Main.WIDTH, Main.HEIGHT);
-    }
 
-    public static void addEventHandler(Stage window) {
         configMenu.setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case ENTER:
@@ -44,20 +42,17 @@ public class ConfigMenu {
 //                    while (SoundPlayer.introTheme.isPlaying()) {
 //                        assert true;
 //                    }
-                    Level1.setBackground(Level1.level);
-                    Level1.setForeground(Level1.level);
-                    window.setScene(Level1.level);
+                    Level1 level1 = new Level1(window);
+                    window.setScene(level1.getLevel());
                     break;
                 case ESCAPE:
-                    window.setScene(MainMenu.mainMenu);
                     break;
                 case UP:
                     CursorManager.setNextImage((Pane) configMenu.getRoot());
-                    CursorManager.setNextCursor(Level1.level);
+                    CursorManager.setNextCursor();
                     break;
                 case DOWN:
                     CursorManager.setPrevImage((Pane) configMenu.getRoot());
-                    CursorManager.setPrevCursor(Level1.level);
                     break;
                 case LEFT:
                     BackgroundManager.setPrevBackground((Pane) configMenu.getRoot());
@@ -67,5 +62,9 @@ public class ConfigMenu {
                     break;
             }
         });
+    }
+
+    public Scene getConfigMenu() {
+        return configMenu;
     }
 }

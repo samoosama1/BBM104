@@ -33,14 +33,12 @@ public class CursorManager {
         currentCursor = imageCursorList.get(0);
     }
 
-    public static void setNextCursor(Scene scene) {
+    public static void setNextCursor() {
         currentCursor = IteratorHelper.getNext(cursorIterator, currentCursor);
-        scene.setCursor(currentCursor);
     }
 
-    public static void setPrevCursor(Scene scene) {
+    public static void setPrevCursor() {
         currentCursor = IteratorHelper.getPrev(cursorIterator, currentCursor);
-        scene.setCursor(currentCursor);
     }
 
     public static void setCurrentCursor(Scene scene) {
