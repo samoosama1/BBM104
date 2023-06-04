@@ -6,11 +6,17 @@ import javafx.util.Duration;
 
 public class DiagonalDuck extends Duck{
     public static Rotate ROTATE_90_DEGREES = new Rotate();
+    public static Rotate ROTATE_0_DEGREES = new Rotate();
 
     static {
         ROTATE_90_DEGREES.setAngle(90);
         ROTATE_90_DEGREES.setPivotX(DUCK_WIDTH * 0.5);
         ROTATE_90_DEGREES.setPivotY(DUCK_HEIGHT * 0.5);
+
+        ROTATE_0_DEGREES.setAngle(0);
+        ROTATE_0_DEGREES.setPivotX(DUCK_WIDTH * 0.5);
+        ROTATE_0_DEGREES.setPivotY(DUCK_HEIGHT * 0.5);
+
     }
 
     public DiagonalDuck(double duckX, double duckY, double deltaX, double deltaY, String color) {
@@ -18,6 +24,8 @@ public class DiagonalDuck extends Duck{
 
         if (getFlyingDeltaY() > 0) {
             getImageView().getTransforms().add(ROTATE_90_DEGREES);
+        } else {
+            getImageView().getTransforms().add(ROTATE_0_DEGREES);
         }
 
         setFlyingAnimation(new Timeline(
@@ -35,15 +43,16 @@ public class DiagonalDuck extends Duck{
                 setDeltaX(getDeltaX() * -1);
                 if (getDeltaX() > 0 && getFlyingDeltaY() < 0) {
                     getImageView().getTransforms().set(0, UP_RIGHT);
-                    getImageView().getTransforms().remove(ROTATE_90_DEGREES);
+                    getImageView().getTransforms().set(1, ROTATE_0_DEGREES);
                 } else if (getDeltaX() > 0 && getFlyingDeltaY() > 0) {
-                    getImageView().getTransforms().set(0, ROTATE_90_DEGREES);
+                    getImageView().getTransforms().set(0, UP_RIGHT);
+                    getImageView().getTransforms().set(1, ROTATE_90_DEGREES);
                 } else if (getDeltaX() < 0 && getFlyingDeltaY() < 0) {
                     getImageView().getTransforms().set(0, UP_LEFT);
-                    getImageView().getTransforms().remove(ROTATE_90_DEGREES);
-                } else {
+                    getImageView().getTransforms().set(1, ROTATE_0_DEGREES);
+                } else if (getDeltaX() < 0 && getFlyingDeltaY() > 0){
                     getImageView().getTransforms().set(0, UP_LEFT);
-                    getImageView().getTransforms().add(ROTATE_90_DEGREES);
+                    getImageView().getTransforms().set(1, ROTATE_90_DEGREES);
                 }
             }
 
@@ -51,17 +60,19 @@ public class DiagonalDuck extends Duck{
                 setFlyingDeltaY(getFlyingDeltaY() * -1);
                 if (getDeltaX() > 0 && getFlyingDeltaY() < 0) {
                     getImageView().getTransforms().set(0, UP_RIGHT);
-                    getImageView().getTransforms().remove(ROTATE_90_DEGREES);
+                    getImageView().getTransforms().set(1, ROTATE_0_DEGREES);
                 } else if (getDeltaX() > 0 && getFlyingDeltaY() > 0) {
-                    getImageView().getTransforms().set(0, ROTATE_90_DEGREES);
+                    getImageView().getTransforms().set(0, UP_RIGHT);
+                    getImageView().getTransforms().set(1, ROTATE_90_DEGREES);
                 } else if (getDeltaX() < 0 && getFlyingDeltaY() < 0) {
                     getImageView().getTransforms().set(0, UP_LEFT);
-                    getImageView().getTransforms().remove(ROTATE_90_DEGREES);
-                } else {
+                    getImageView().getTransforms().set(1, ROTATE_0_DEGREES);
+                } else if (getDeltaX() < 0 && getFlyingDeltaY() > 0){
                     getImageView().getTransforms().set(0, UP_LEFT);
-                    getImageView().getTransforms().add(ROTATE_90_DEGREES);
+                    getImageView().getTransforms().set(1, ROTATE_90_DEGREES);
                 }
             }
+
             getHitbox().setTranslateX(getDuckX());
             getHitbox().setTranslateY(getDuckY());
         })));

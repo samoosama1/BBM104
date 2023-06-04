@@ -33,7 +33,7 @@ public class Level4 extends Level{
                 if (isLevelPassed()) {
                     if (event1.getCode() == KeyCode.ENTER) {
                         SoundPlayer.stopSound(SoundPlayer.levelComplete);
-                        window.setScene(new Level3(window, 2).getLevel());
+                        window.setScene(new Level5(window, 4).getLevel());
                     }
                 } else {
                     if (event1.getCode() == KeyCode.ENTER) {

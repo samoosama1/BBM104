@@ -1,29 +1,32 @@
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-public class Level2 extends Level{
-    public Level2(Stage window, int numOfDucks) {
+public class Level5 extends Level{
+    public Level5(Stage window, int numOfDucks) {
         super(numOfDucks, window);
 
-        Text levelText = new Text("Level 2/6");
+        Text levelText = new Text("Level 5/6");
         levelText.setFont(Font.font("Arial", FontWeight.BOLD, Main.SCALE * 8)); // Set the font and size as desired
         levelText.setTranslateY(Main.SCALE * 8);
         levelText.setTranslateX(Main.WIDTH * 0.42);
         levelText.setFill(Color.ORANGE);
 
-        Duck duck = new DiagonalDuck(Main.WIDTH * 0.8, Main.HEIGHT * 0.8, 1, -1, "red");
-        getDuckList().add(duck);
+        Duck duck1 = new DiagonalDuck(Main.WIDTH * 0.2, Main.HEIGHT * 0.8, 2, -1, "black");
+        Duck duck2 = new DiagonalDuck(Main.WIDTH * 0.8, Main.HEIGHT * 0.2, -2, 2, "blue");
+        Duck duck3 = new HorizontalDuck(Main.WIDTH * 0.3, Main.HEIGHT * 0.3, -3, 3, "red");
+        Duck duck4 = new DiagonalDuck(Main.WIDTH * 0.5, Main.HEIGHT * 0.5, 2.5, -2.5, "red");
 
-        getRoot().getChildren().add(0, duck.getHitbox());
+        getDuckList().add(duck1);
+        getDuckList().add(duck2);
+        getDuckList().add(duck3);
+
+        getRoot().getChildren().add(0, duck1.getHitbox());
+        getRoot().getChildren().add(0, duck2.getHitbox());
+        getRoot().getChildren().add(0, duck3.getHitbox());
         getRoot().getChildren().add(levelText);
 
         getLevel().setOnKeyPressed(event1 -> {
@@ -31,7 +34,7 @@ public class Level2 extends Level{
                 if (isLevelPassed()) {
                     if (event1.getCode() == KeyCode.ENTER) {
                         SoundPlayer.stopSound(SoundPlayer.levelComplete);
-                        window.setScene(new Level3(window, 2).getLevel());
+                        window.setScene(new Level5(window, 4).getLevel());
                     }
                 } else {
                     if (event1.getCode() == KeyCode.ENTER) {
@@ -42,6 +45,5 @@ public class Level2 extends Level{
                 }
             }
         });
-
     }
 }

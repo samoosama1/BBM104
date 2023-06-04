@@ -25,9 +25,9 @@ public class HorizontalDuck extends Duck{
             if (getDuckX() <= 0 || Main.WIDTH - getDuckX() <= DuckMaker.HITBOX_SIZE) {
                 setDeltaX(getDeltaX() * -1);
                 if (getDeltaX() > 0) {
-                    getImageView().getTransforms().set(0, UP_RIGHT);
+                    getImageView().getTransforms().remove(UP_LEFT);
                 } else {
-                    getImageView().getTransforms().set(0, UP_LEFT);
+                    getImageView().getTransforms().add(UP_LEFT);
                 }
             }
             getHitbox().setTranslateX(getDuckX()); })

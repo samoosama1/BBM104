@@ -127,7 +127,7 @@ public class Level {
 
 
         BackgroundManager.setCurrentBackground(root);
-        BackgroundManager.setCurrentForeground(root);
+//        BackgroundManager.setCurrentForeground(root);
         CursorManager.setCurrentCursor(level);
         root.getChildren().addAll(youWin, playNextLevel, ammoLeft, gameOver, playAgain, exit);
     }
