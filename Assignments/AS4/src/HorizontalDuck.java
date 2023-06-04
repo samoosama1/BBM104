@@ -4,7 +4,6 @@ import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 public class HorizontalDuck extends Duck{
-
     public HorizontalDuck(double duckX, double duckY, double deltaX, double deltaY, String color) {
         super(duckX, duckY, deltaX, deltaY, color);
 
@@ -25,11 +24,10 @@ public class HorizontalDuck extends Duck{
 
             if (getDuckX() <= 0 || Main.WIDTH - getDuckX() <= DuckMaker.HITBOX_SIZE) {
                 setDeltaX(getDeltaX() * -1);
-                if (getImageView().getTransforms().isEmpty()) {
-                    getImageView().getTransforms().add(0, mirrorScale);
+                if (getDeltaX() > 0) {
+                    getImageView().getTransforms().set(0, UP_RIGHT);
                 } else {
-                    getImageView().getTransforms().remove(0);
-                    getImageView().setTranslateX(0);
+                    getImageView().getTransforms().set(0, UP_LEFT);
                 }
             }
             getHitbox().setTranslateX(getDuckX()); })

@@ -116,11 +116,14 @@ public class Duck {
 
         if (deltaX < 0) {
             imageView.getTransforms().add(UP_LEFT);
+        } else {
+            imageView.getTransforms().add(UP_RIGHT);
         }
 
         setDyingAnimation(new Timeline(
             new KeyFrame(Duration.ZERO, event -> getImageView().setImage(Duck.listMap.get(color)[6])),
             new KeyFrame(Duration.seconds(0.3), event -> {
+                SoundPlayer.playSound(SoundPlayer.duckFall);
                 getImageView().getTransforms().clear();
                 Scale scale = getDeltaX() < 0 ? UP_LEFT : UP_RIGHT;
                 scale.setPivotX(Duck.DUCK_WIDTH * 0.5);

@@ -16,10 +16,14 @@ public class DiagonalDuck extends Duck{
     public DiagonalDuck(double duckX, double duckY, double deltaX, double deltaY, String color) {
         super(duckX, duckY, deltaX, deltaY, color);
 
+        if (getFlyingDeltaY() > 0) {
+            getImageView().getTransforms().add(ROTATE_90_DEGREES);
+        }
+
         setFlyingAnimation(new Timeline(
-            new KeyFrame(Duration.seconds(0.2), event -> getImageView().setImage(Duck.listMap.get(color)[1])),
-            new KeyFrame(Duration.seconds(0.4), event -> getImageView().setImage(Duck.listMap.get(color)[2])),
-            new KeyFrame(Duration.seconds(0.6), event -> getImageView().setImage(Duck.listMap.get(color)[3]))));
+            new KeyFrame(Duration.seconds(0.2), event -> getImageView().setImage(Duck.listMap.get(color)[0])),
+            new KeyFrame(Duration.seconds(0.4), event -> getImageView().setImage(Duck.listMap.get(color)[1])),
+            new KeyFrame(Duration.seconds(0.6), event -> getImageView().setImage(Duck.listMap.get(color)[2]))));
         getFlyingAnimation().setCycleCount(Timeline.INDEFINITE);
         getFlyingAnimation().play();
 
