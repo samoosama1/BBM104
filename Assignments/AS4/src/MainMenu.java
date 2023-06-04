@@ -26,25 +26,25 @@ public class MainMenu {
         // Create a background image object
         BackgroundImage background = new BackgroundImage(welcome,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT, new BackgroundSize(Main.SCALE * 256, Main.SCALE * 240,
+                BackgroundPosition.DEFAULT, new BackgroundSize(DuckHunt.SCALE * 256, DuckHunt.SCALE * 240,
                 false, false, false, false));
 
         // Create a root and set the background
-        VBox root = new VBox(Main.SCALE * 3.3);
+        VBox root = new VBox(DuckHunt.SCALE * 3.3);
         root.setAlignment(Pos.CENTER);
         root.setBackground(new Background(background));
 
         // Create the text node
 
         Text startText = new Text("PRESS ENTER TO START");
-        startText.setFont(Font.font("Arial", FontWeight.BOLD, Main.SCALE * 16)); // Set the font and size as desired
-        startText.setTranslateY(Main.SCALE * 48);
+        startText.setFont(Font.font("Arial", FontWeight.BOLD, DuckHunt.SCALE * 16)); // Set the font and size as desired
+        startText.setTranslateY(DuckHunt.SCALE * 48);
         startText.setFill(Color.ORANGE);
 
         Text exitText = new Text("PRESS ESC TO EXIT");
-        exitText.setFont(Font.font("Arial", FontWeight.BOLD, Main.SCALE * 16)); // Set the font and size as desired
+        exitText.setFont(Font.font("Arial", FontWeight.BOLD, DuckHunt.SCALE * 16)); // Set the font and size as desired
         exitText.setFill(Color.ORANGE);
-        exitText.setTranslateY(Main.SCALE * 48);
+        exitText.setTranslateY(DuckHunt.SCALE * 48);
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.75 * 2), event -> startText.setFill(Color.ORANGE)),
                 new KeyFrame(Duration.seconds(0.75), event -> { startText.setFill(Color.TRANSPARENT); }));
@@ -54,7 +54,7 @@ public class MainMenu {
         // Add the text node to the root
         root.getChildren().addAll(startText, exitText);
 
-        mainMenu = new Scene(root, Main.SCALE * 256, Main.SCALE * 240);
+        mainMenu = new Scene(root, DuckHunt.SCALE * 256, DuckHunt.SCALE * 240);
 
         mainMenu.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if (key.getCode() == KeyCode.ENTER){
@@ -64,6 +64,9 @@ public class MainMenu {
                 System.exit(1);
             }
         });
+
+        CursorManager.reset();
+        BackgroundManager.reset();
     }
 
     public Scene getMainMenu() {

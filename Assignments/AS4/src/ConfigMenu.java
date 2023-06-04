@@ -1,7 +1,5 @@
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -13,26 +11,26 @@ public class ConfigMenu {
     private Scene configMenu;
 
     public ConfigMenu(Stage window) {
-        VBox pane = new VBox(Main.SCALE * 0.1);
+        VBox pane = new VBox(DuckHunt.SCALE * 0.1);
         pane.setAlignment(Pos.TOP_CENTER);
         BackgroundManager.setCurrentBackground(pane);
 
         Text navigateText = new Text("USE ARROW KEYS TO NAVIGATE");
-        navigateText.setFont(Font.font("Arial", FontWeight.BOLD, Main.SCALE * 8)); // Set the font and size as desired
+        navigateText.setFont(Font.font("Arial", FontWeight.BOLD, DuckHunt.SCALE * 8)); // Set the font and size as desired
         navigateText.setFill(Color.ORANGE);
 
         Text startText = new Text("PRESS ENTER TO START");
-        startText.setFont(Font.font("Arial", FontWeight.BOLD, Main.SCALE * 8)); // Set the font and size as desired
+        startText.setFont(Font.font("Arial", FontWeight.BOLD, DuckHunt.SCALE * 8)); // Set the font and size as desired
         startText.setFill(Color.ORANGE);
 
         Text exitText = new Text("PRESS ESC TO EXIT");
-        exitText.setFont(Font.font("Arial", FontWeight.BOLD, Main.SCALE * 8)); // Set the font and size as desired
+        exitText.setFont(Font.font("Arial", FontWeight.BOLD, DuckHunt.SCALE * 8)); // Set the font and size as desired
         exitText.setFill(Color.ORANGE);
 
         pane.getChildren().addAll(navigateText, startText, exitText);
         CursorManager.setCurrentImage(pane);
 
-        configMenu = new Scene(pane, Main.WIDTH, Main.HEIGHT);
+        configMenu = new Scene(pane, DuckHunt.WIDTH, DuckHunt.HEIGHT);
 
         configMenu.setOnKeyPressed(event -> {
             switch (event.getCode()) {

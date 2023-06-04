@@ -20,9 +20,9 @@ public class CursorManager {
         for (int i = 0; i < 7; i++) {
             Image image = new Image(String.format("assets/crosshair/%d.png", i+1));
             ImageView imageView = new ImageView(image);
-            imageView.setTranslateY((double) 180 * Main.SCALE / 2);
-            imageView.setFitWidth(10 * Main.SCALE);
-            imageView.setFitHeight(10 * Main.SCALE);
+            imageView.setTranslateY((double) 180 * DuckHunt.SCALE / 2);
+            imageView.setFitWidth(10 * DuckHunt.SCALE);
+            imageView.setFitHeight(10 * DuckHunt.SCALE);
             ImageCursor imageCursor = new ImageCursor(image);
             imageViewList.add(imageView);
             imageCursorList.add(imageCursor);
@@ -57,5 +57,17 @@ public class CursorManager {
     public static void setPrevImage(Pane pane) {
         currentImage = IteratorHelper.getPrev(imageIterator, currentImage);
         pane.getChildren().set(pane.getChildren().size() - 1, currentImage);
+    }
+
+    public static void reset() {
+        while (cursorIterator.hasPrevious()) {
+            cursorIterator.previous();
+        }
+        currentCursor = cursorIterator.next();
+
+        while (imageIterator.hasPrevious()) {
+            imageIterator.previous();
+        }
+        currentImage = imageIterator.next();
     }
 }

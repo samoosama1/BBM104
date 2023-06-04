@@ -22,7 +22,7 @@ public class HorizontalDuck extends Duck{
             setDuckX(getDuckX() + getDeltaX());
             setDuckY(getDuckY() + getFlyingDeltaY());
 
-            if (getDuckX() <= 0 || Main.WIDTH - getDuckX() <= DuckMaker.HITBOX_SIZE) {
+            if (getDuckX() <= 0 || DuckHunt.WIDTH - getDuckX() <= DuckMaker.HITBOX_SIZE) {
                 setDeltaX(getDeltaX() * -1);
                 if (getDeltaX() > 0) {
                     getImageView().getTransforms().remove(UP_LEFT);

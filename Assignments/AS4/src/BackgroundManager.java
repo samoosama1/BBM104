@@ -16,7 +16,7 @@ public class BackgroundManager {
         for (int i = 0; i < 6; i++) {
             BackgroundImage background = new BackgroundImage(new Image(String.format("assets/background/%d.png", i+1)),
                     BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                    BackgroundPosition.DEFAULT, new BackgroundSize(Main.WIDTH, Main.HEIGHT,
+                    BackgroundPosition.DEFAULT, new BackgroundSize(DuckHunt.WIDTH, DuckHunt.HEIGHT,
                     false, false, false, false));
             backgroundList.add(new Background(background));
         }
@@ -25,8 +25,8 @@ public class BackgroundManager {
 
         for (int i = 0; i < 6; i++) {
             ImageView imageView = new ImageView(new Image(String.format("assets/foreground/%d.png", i+1)));
-            imageView.setFitWidth(Main.WIDTH);
-            imageView.setFitHeight(Main.HEIGHT);
+            imageView.setFitWidth(DuckHunt.WIDTH);
+            imageView.setFitHeight(DuckHunt.HEIGHT);
             foregroundList.add(imageView);
         }
         foregroundIterator = foregroundList.listIterator();
@@ -51,5 +51,17 @@ public class BackgroundManager {
 
     public static void setCurrentForeground(Pane pane) {
         pane.getChildren().add(currentForeground);
+    }
+
+    public static void reset() {
+        while (backgroundIterator.hasPrevious()) {
+            backgroundIterator.previous();
+        }
+        currentBackground = backgroundIterator.next();
+
+        while (foregroundIterator.hasPrevious()) {
+            foregroundIterator.previous();
+        }
+        currentForeground = foregroundIterator.next();
     }
 }

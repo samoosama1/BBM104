@@ -4,7 +4,7 @@ import javafx.scene.layout.StackPane;
 
 
 public class DuckMaker {
-    public static final int  HITBOX_SIZE = 33 * Main.SCALE;
+    public static final int  HITBOX_SIZE = 33 * DuckHunt.SCALE;
     public static Pane makeHitbox(ImageView duckImageView) {
         Pane hitbox = new StackPane(duckImageView);
         hitbox.setPrefSize(HITBOX_SIZE, HITBOX_SIZE);

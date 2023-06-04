@@ -1,7 +1,6 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 public class DiagonalDuck extends Duck{
@@ -39,7 +38,7 @@ public class DiagonalDuck extends Duck{
             setDuckX(getDuckX() + getDeltaX());
             setDuckY(getDuckY() + getFlyingDeltaY());
 
-            if (getDuckX() <= 0 || Main.WIDTH - getDuckX() <= DuckMaker.HITBOX_SIZE) {
+            if (getDuckX() <= 0 || DuckHunt.WIDTH - getDuckX() <= DuckMaker.HITBOX_SIZE) {
                 setDeltaX(getDeltaX() * -1);
                 if (getDeltaX() > 0 && getFlyingDeltaY() < 0) {
                     getImageView().getTransforms().set(0, UP_RIGHT);
@@ -56,7 +55,7 @@ public class DiagonalDuck extends Duck{
                 }
             }
 
-            if (getDuckY() <= 0 || Main.HEIGHT - getDuckY() <= DuckMaker.HITBOX_SIZE) {
+            if (getDuckY() <= 0 || DuckHunt.HEIGHT - getDuckY() <= DuckMaker.HITBOX_SIZE) {
                 setFlyingDeltaY(getFlyingDeltaY() * -1);
                 if (getDeltaX() > 0 && getFlyingDeltaY() < 0) {
                     getImageView().getTransforms().set(0, UP_RIGHT);
