@@ -3,24 +3,37 @@ import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Duck {
+    public static Scale UP_LEFT = new Scale(-1, 1);
+    public static Scale UP_RIGHT = new Scale(1, 1);
     public static final int DUCK_WIDTH = 27 * Main.SCALE;
     public static final int DUCK_HEIGHT = 31 * Main.SCALE;
     public static Map<String, Image[]> listMap = new HashMap<>();;
+
+    static {
+        UP_RIGHT.setPivotX(DUCK_WIDTH * 0.5);
+        UP_LEFT.setPivotX(DUCK_WIDTH * 0.5);
+
+        UP_RIGHT.setPivotY(DUCK_HEIGHT * 0.5);
+        UP_LEFT.setPivotY(DUCK_HEIGHT * 0.5);
+    }
 
     private double duckX;
     private double duckY;
     private double flyingDeltaX;
     private double flyingDeltaY;
-    private final double fallingDeltaY = 1 * Main.SCALE;
+    private final double fallingDeltaY = 2 * Main.SCALE;
     private ImageView imageView = DuckMaker.makeImageView();
     private final Pane hitbox = DuckMaker.makeHitbox(imageView);
+    private boolean isHit = false;
 
     public double getFlyingDeltaX() {
         return flyingDeltaX;
@@ -101,21 +114,30 @@ public class Duck {
         hitbox.setTranslateX(duckX);
         hitbox.setTranslateY(duckY);
 
+        if (deltaX < 0) {
+            imageView.getTransforms().add(UP_LEFT);
+        }
+
         setDyingAnimation(new Timeline(
-                new KeyFrame(Duration.ZERO, event -> getImageView().setImage(Duck.listMap.get(color)[6])),
-                new KeyFrame(Duration.seconds(0.3), event -> {
-                    getImageView().setImage(Duck.listMap.get(color)[7]);
-                    getFallingMovement().play();})
+            new KeyFrame(Duration.ZERO, event -> getImageView().setImage(Duck.listMap.get(color)[6])),
+            new KeyFrame(Duration.seconds(0.3), event -> {
+                getImageView().getTransforms().clear();
+                Scale scale = getDeltaX() < 0 ? UP_LEFT : UP_RIGHT;
+                scale.setPivotX(Duck.DUCK_WIDTH * 0.5);
+                scale.setPivotY(Duck.DUCK_HEIGHT * 0.5);
+                getImageView().getTransforms().add(scale);
+                getImageView().setImage(Duck.listMap.get(color)[7]);
+                getFallingMovement().play();})
         ));
 
         setFallingMovement(new Timeline(
-                new KeyFrame(Duration.millis(16), event -> {
-                    setDuckY(getDuckY() + getFallingDeltaY());
-                    if (Main.HEIGHT - getHitbox().getTranslateY() <= DuckMaker.HITBOX_SIZE) {
-                        getFallingMovement().stop();
-                    }
-                    getHitbox().setTranslateY(getDuckY());
-                })
+            new KeyFrame(Duration.millis(16), event -> {
+                setDuckY(getDuckY() + getFallingDeltaY());
+                if (Main.HEIGHT - getHitbox().getTranslateY() <= DuckMaker.HITBOX_SIZE) {
+                    getFallingMovement().stop();
+                }
+                getHitbox().setTranslateY(getDuckY());
+            })
         ));
         getFallingMovement().setCycleCount(Timeline.INDEFINITE);
     }
@@ -172,5 +194,13 @@ public class Duck {
 
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
+    }
+
+    public boolean isHit() {
+        return isHit;
+    }
+
+    public void setHit(boolean hit) {
+        isHit = hit;
     }
 }

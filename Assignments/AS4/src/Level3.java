@@ -10,15 +10,18 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Level1 extends Level{
-    public HorizontalDuck duck;
-    private Scene level;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Level3 extends Level {
+    private List<Duck> duckList = new ArrayList<>();
     private boolean enableMouseClick = true;
     private boolean enableEnter = false;
 
-    public Level1(Stage window, int numOfBullets) {
+    public Level3(Stage window, int numOfBullets) {
         super(numOfBullets);
-        Text levelText = new Text("Level 1/6");
+
+        Text levelText = new Text("Level 3/6");
         levelText.setFont(Font.font("Arial", FontWeight.BOLD, Main.SCALE * 8)); // Set the font and size as desired
         levelText.setTranslateY(Main.SCALE * 8);
         levelText.setTranslateX(Main.WIDTH * 0.42);
@@ -45,14 +48,15 @@ public class Level1 extends Level{
         ammoLeft.setFill(Color.ORANGE);
 
         Pane root = new Pane();
+        Duck duck1 = new HorizontalDuck(100 * Main.SCALE, 16.6 * Main.SCALE, 2, 0, "black");
 
-        duck = new HorizontalDuck(66 * Main.SCALE, 33 * Main.SCALE, 1, 0, "blue");
-        root.getChildren().add(duck.getHitbox());
+        Duck duck2 = new HorizontalDuck(66 * Main.SCALE, 66 * Main.SCALE, -2, 0, "red");
+        duckList.add(duck1);
+        duckList.add(duck2);
+        root.getChildren().add(duck1.getHitbox());
+        root.getChildren().add(duck2.getHitbox());
+
         level = new Scene(root, Main.WIDTH, Main.HEIGHT);
-        CursorManager.setCurrentCursor(level);
-        BackgroundManager.setCurrentBackground(root);
-        BackgroundManager.setCurrentForeground(root);
-        root.getChildren().addAll(levelText, youWin, playNextLevel, ammoLeft);
 
         level.setOnMouseClicked(event -> {
             if (enableMouseClick) {
@@ -63,23 +67,32 @@ public class Level1 extends Level{
                 double clickX = event.getX();
                 double clickY = event.getY();
 
-                Pane hitbox = duck.getHitbox();
-                if (clickX >= hitbox.getTranslateX() && clickX <= hitbox.getTranslateX() + DuckMaker.HITBOX_SIZE &&
-                        clickY >= hitbox.getTranslateY() && clickY <= hitbox.getTranslateY() + DuckMaker.HITBOX_SIZE) {
-                    enableMouseClick = false;
-                    enableEnter = true;
-                    youWin.setFill(Color.ORANGE);
-                    playNextLevel.setFill(Color.ORANGE);
-                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.75 * 2), event2 -> playNextLevel.setFill(Color.ORANGE)),
-                            new KeyFrame(Duration.seconds(0.75), event2 -> playNextLevel.setFill(Color.TRANSPARENT)));
-                    timeline.setCycleCount(Timeline.INDEFINITE);
-                    timeline.play();
-                    SoundPlayer.playSound(SoundPlayer.duckFall);
-                    SoundPlayer.playSound(SoundPlayer.levelComplete);
-                    duck.die();
-                } else if (getNumOfBullets() == 0) {
-                    enableMouseClick = false;
-                    SoundPlayer.playSound(SoundPlayer.gameOver);
+                for (Duck duck : duckList) {
+                    Pane hitbox = duck.getHitbox();
+                    if (clickX >= hitbox.getTranslateX() && clickX <= hitbox.getTranslateX() + DuckMaker.HITBOX_SIZE &&
+                            clickY >= hitbox.getTranslateY() && clickY <= hitbox.getTranslateY() + DuckMaker.HITBOX_SIZE ) {
+                        if (!duck.isHit()) {
+                            incrementDuckHit();
+                            duck.setHit(true);
+                            duck.die();
+                        }
+                    }
+                    if (getHitDucks() == duckList.size()) {
+                        enableMouseClick = false;
+                        enableEnter = true;
+                        youWin.setFill(Color.ORANGE);
+                        playNextLevel.setFill(Color.ORANGE);
+                        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.75 * 2), event2 -> playNextLevel.setFill(Color.ORANGE)),
+                                new KeyFrame(Duration.seconds(0.75), event2 -> playNextLevel.setFill(Color.TRANSPARENT)));
+                        timeline.setCycleCount(Timeline.INDEFINITE);
+                        timeline.play();
+                        SoundPlayer.playSound(SoundPlayer.duckFall);
+                        duck.die();
+                        SoundPlayer.playSound(SoundPlayer.levelComplete);
+                    } else if (getNumOfBullets() == 0) {
+                        enableMouseClick = false;
+                        SoundPlayer.playSound(SoundPlayer.gameOver);
+                    }
                 }
             }
         });
@@ -88,14 +101,16 @@ public class Level1 extends Level{
             if (enableEnter) {
                 if (event1.getCode() == KeyCode.ENTER) {
                     SoundPlayer.stopSound(SoundPlayer.levelComplete);
-                    Level2 level2 = new Level2(window, 3);
-                    window.setScene(level2.getLevel());
+                    Level3 level3 = new Level3(window, 6);
+                    window.setScene(level3.getLevel());
                 }
             }
         });
+
+        BackgroundManager.setCurrentBackground(root);
+        BackgroundManager.setCurrentForeground(root);
+        CursorManager.setCurrentCursor(level);
+        root.getChildren().addAll(levelText, youWin, playNextLevel, ammoLeft);
     }
 
-    public Scene getLevel() {
-        return level;
-    }
 }

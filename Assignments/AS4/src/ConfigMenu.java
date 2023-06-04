@@ -42,7 +42,7 @@ public class ConfigMenu {
 //                    while (SoundPlayer.introTheme.isPlaying()) {
 //                        assert true;
 //                    }
-                    Level1 level1 = new Level1(window);
+                    Level1 level1 = new Level1(window, 3);
                     window.setScene(level1.getLevel());
                     break;
                 case ESCAPE:
@@ -53,6 +53,7 @@ public class ConfigMenu {
                     break;
                 case DOWN:
                     CursorManager.setPrevImage((Pane) configMenu.getRoot());
+                    CursorManager.setPrevCursor();
                     break;
                 case LEFT:
                     BackgroundManager.setPrevBackground((Pane) configMenu.getRoot());

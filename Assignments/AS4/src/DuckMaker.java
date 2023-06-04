@@ -8,7 +8,7 @@ public class DuckMaker {
     public static Pane makeHitbox(ImageView duckImageView) {
         Pane hitbox = new StackPane(duckImageView);
         hitbox.setPrefSize(HITBOX_SIZE, HITBOX_SIZE);
-        hitbox.setStyle("-fx-background-color: red");
+        hitbox.setStyle("-fx-background-color: transparent");
         return hitbox;
     }
 
