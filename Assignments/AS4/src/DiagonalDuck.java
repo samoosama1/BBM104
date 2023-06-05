@@ -3,6 +3,9 @@ import javafx.animation.Timeline;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
+/**
+ * Subclass of duck that is moving across the diagonals.
+ */
 public class DiagonalDuck extends Duck{
     public static Rotate ROTATE_90_DEGREES = new Rotate();
     public static Rotate ROTATE_0_DEGREES = new Rotate();
@@ -18,9 +21,16 @@ public class DiagonalDuck extends Duck{
 
     }
 
+    /**
+     * Instantiating the duck with passed parameters
+     * @param duckX The X coordinate where the duck is going to be put in the scene
+     * @param duckY The Y coordinate where the duck is going to be put in the scene
+     * @param deltaX Speed of the duck across X axis.
+     * @param deltaY Speed of the duck across Y axis.
+     * @param color Color of the duck
+     */
     public DiagonalDuck(double duckX, double duckY, double deltaX, double deltaY, String color) {
         super(duckX, duckY, deltaX, deltaY, color);
-
         if (getFlyingDeltaY() > 0) {
             getImageView().getTransforms().add(ROTATE_90_DEGREES);
         } else {
@@ -34,6 +44,7 @@ public class DiagonalDuck extends Duck{
         getFlyingAnimation().setCycleCount(Timeline.INDEFINITE);
         getFlyingAnimation().play();
 
+        // Reflect and rotate in order to make duck fly in correct directions
         setFlyingMovement(new Timeline(new KeyFrame(new Duration(16), event -> {
             setDuckX(getDuckX() + getDeltaX());
             setDuckY(getDuckY() + getFlyingDeltaY());

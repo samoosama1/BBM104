@@ -3,6 +3,9 @@ import javafx.scene.layout.Background;
 
 import java.util.ListIterator;
 
+/**
+ * Class that has the generic IteratorHelper method which takes in an ListIterator and iterates over it.
+ */
 public class IteratorHelper {
     public static <T> T getNext(ListIterator<T> iterator, T currentItem)  {
         if (iterator.hasNext()) {

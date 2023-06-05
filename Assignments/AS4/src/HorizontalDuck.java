@@ -3,7 +3,18 @@ import javafx.animation.Timeline;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
+/**
+ * Subclass of Duck which moves along X axis.
+ */
 public class HorizontalDuck extends Duck{
+    /**
+     * Instantiating the duck with passed parameters
+     * @param duckX The X coordinate where the duck is going to be put in the scene
+     * @param duckY The Y coordinate where the duck is going to be put in the scene
+     * @param deltaX Speed of the duck across X axis.
+     * @param deltaY Speed of the duck across Y axis.
+     * @param color Color of the duck
+     */
     public HorizontalDuck(double duckX, double duckY, double deltaX, double deltaY, String color) {
         super(duckX, duckY, deltaX, deltaY, color);
 

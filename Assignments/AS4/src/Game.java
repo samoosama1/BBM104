@@ -1,6 +1,9 @@
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+/**
+ * Class which instantiates the MainMenu and starts the game.
+ */
 public class Game {
     public void startGame(Stage window) {
         window.setTitle("HUBBM DuckHunt");

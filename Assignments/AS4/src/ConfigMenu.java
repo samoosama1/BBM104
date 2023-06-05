@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class ConfigMenu {
     private Scene configMenu;
 
-    public ConfigMenu(Stage window) {
+    public ConfigMenu(Stage window, Scene mainMenu) {
         VBox pane = new VBox(DuckHunt.SCALE * 0.1);
         pane.setAlignment(Pos.TOP_CENTER);
         BackgroundManager.setCurrentBackground(pane);
@@ -28,7 +28,6 @@ public class ConfigMenu {
         exitText.setFill(Color.ORANGE);
 
         pane.getChildren().addAll(navigateText, startText, exitText);
-        CursorManager.setCurrentImage(pane);
 
         configMenu = new Scene(pane, DuckHunt.WIDTH, DuckHunt.HEIGHT);
 
@@ -36,13 +35,14 @@ public class ConfigMenu {
             switch (event.getCode()) {
                 case ENTER:
                     SoundPlayer.stopSound(SoundPlayer.titleTheme);
-//                    SoundPlayer.playSound(SoundPlayer.introTheme);
-//                    while (SoundPlayer.introTheme.isPlaying()) {
-//                        assert true;
-//                    }
+                    SoundPlayer.playSound(SoundPlayer.introTheme);
+                    while (SoundPlayer.introTheme.isPlaying()) {
+                        assert true;
+                    }
                     window.setScene(new Level1(window, 1).getLevel());
                     break;
                 case ESCAPE:
+                    window.setScene(mainMenu);
                     break;
                 case UP:
                     CursorManager.setNextImage((Pane) configMenu.getRoot());

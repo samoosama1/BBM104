@@ -15,14 +15,14 @@ public class Level6 extends Level{
         levelText.setTranslateX(DuckHunt.WIDTH * 0.42);
         levelText.setFill(Color.ORANGE);
 
-        Text youCompletedGame = new Text("You have completed the game!");
-
+        // Add 5 ducks
         Duck duck1 = new DiagonalDuck(DuckHunt.WIDTH * 0.2, DuckHunt.HEIGHT * 0.8, 2, -1, "black");
         Duck duck2 = new DiagonalDuck(DuckHunt.WIDTH * 0.8, DuckHunt.HEIGHT * 0.2, -2, 2, "black");
         Duck duck3 = new HorizontalDuck(DuckHunt.WIDTH * 0.3, DuckHunt.HEIGHT * 0.3, -4, 0, "blue");
         Duck duck4 = new HorizontalDuck(DuckHunt.WIDTH * 0.5, DuckHunt.HEIGHT * 0.5, 2.5, 0, "blue");
         Duck duck5 = new DiagonalDuck(DuckHunt.WIDTH * 0.5, DuckHunt.HEIGHT * 0.5, 2.5, -2.5, "red");
 
+        // Add to list and their hitbox
         getDuckList().add(duck1);
         getDuckList().add(duck2);
         getDuckList().add(duck3);
@@ -36,12 +36,16 @@ public class Level6 extends Level{
         getRoot().getChildren().add(0, duck5.getHitbox());
         getRoot().getChildren().add(levelText);
 
+        // Game is completed or game is over
         getLevel().setOnKeyPressed(event1 -> {
             if (isEnableEnter()) {
                 if (isLevelPassed()) {
                     if (event1.getCode() == KeyCode.ENTER) {
-                        SoundPlayer.stopSound(SoundPlayer.levelComplete);
-                        window.setScene(new Level5(window, 4).getLevel());
+                        SoundPlayer.stopSound(SoundPlayer.gameComplete);
+                        window.setScene(new Level1(window, 1).getLevel());
+                    } else if (event1.getCode() == KeyCode.ESCAPE) {
+                        SoundPlayer.stopSound(SoundPlayer.gameComplete);
+                        returnToMainMenu();
                     }
                 } else {
                     if (event1.getCode() == KeyCode.ENTER) {

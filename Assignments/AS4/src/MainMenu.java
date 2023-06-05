@@ -14,6 +14,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Class that is responsible for instantiating the MainMenu object in order to create the MainMenu scene.
+ */
 public class MainMenu {
     private Scene mainMenu;
 
@@ -35,7 +38,6 @@ public class MainMenu {
         root.setBackground(new Background(background));
 
         // Create the text node
-
         Text startText = new Text("PRESS ENTER TO START");
         startText.setFont(Font.font("Arial", FontWeight.BOLD, DuckHunt.SCALE * 16)); // Set the font and size as desired
         startText.setTranslateY(DuckHunt.SCALE * 48);
@@ -46,29 +48,35 @@ public class MainMenu {
         exitText.setFill(Color.ORANGE);
         exitText.setTranslateY(DuckHunt.SCALE * 48);
 
+        // Play the timeline for flashing effect
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.75 * 2), event -> startText.setFill(Color.ORANGE)),
-                new KeyFrame(Duration.seconds(0.75), event -> { startText.setFill(Color.TRANSPARENT); }));
+                new KeyFrame(Duration.seconds(0.75), event -> startText.setFill(Color.TRANSPARENT)));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
         // Add the text node to the root
         root.getChildren().addAll(startText, exitText);
-
         mainMenu = new Scene(root, DuckHunt.SCALE * 256, DuckHunt.SCALE * 240);
 
         mainMenu.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if (key.getCode() == KeyCode.ENTER){
-                ConfigMenu configMenu = new ConfigMenu(window);
+                ConfigMenu configMenu = new ConfigMenu(window, mainMenu);
+                // Reset the background and cursor in order to reset the game
+                CursorManager.reset();
+                BackgroundManager.reset();
+                CursorManager.setCurrentImage((Pane) configMenu.getConfigMenu().getRoot());
+                BackgroundManager.setCurrentBackground((Pane) configMenu.getConfigMenu().getRoot());
                 window.setScene(configMenu.getConfigMenu());
             } else if (key.getCode() == KeyCode.ESCAPE) {
                 System.exit(1);
             }
         });
-
-        CursorManager.reset();
-        BackgroundManager.reset();
     }
 
+    /**
+     * Returns the MainMenu scene
+     * @return MainMenu scene
+     */
     public Scene getMainMenu() {
         return mainMenu;
     }
