@@ -8,7 +8,6 @@ public class BinaryCounter {
 
         for (int i = 1; i <= n; i++) {
             String binaryNumber = queue.removeFromHead();
-            System.out.println(i + ": " + binaryNumber);
             FileOutput.writeToFile(outputPath, " " + binaryNumber, true, false);
 
             queue.addToTail(binaryNumber + "0");

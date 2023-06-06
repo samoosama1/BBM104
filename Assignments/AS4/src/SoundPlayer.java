@@ -28,7 +28,7 @@ public class SoundPlayer {
 
     /**
      * Plays the AudioClip.
-     * @param sound
+     * @param sound AudioClip to play
      */
     public static void playSound(AudioClip sound) {
             sound.play();
@@ -36,7 +36,7 @@ public class SoundPlayer {
 
     /**
      * Stops the AudioClip.
-     * @param sound
+     * @param sound AudioClip to stop
      */
     public static void stopSound(AudioClip sound) {
             sound.stop();

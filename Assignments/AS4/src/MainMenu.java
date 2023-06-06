@@ -18,7 +18,7 @@ import javafx.util.Duration;
  * Class that is responsible for instantiating the MainMenu object in order to create the MainMenu scene.
  */
 public class MainMenu {
-    private Scene mainMenu;
+    private final Scene mainMenu;
 
     public MainMenu(Stage window) {
         SoundPlayer.titleTheme.setCycleCount(AudioClip.INDEFINITE);

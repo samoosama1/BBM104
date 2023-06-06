@@ -1,6 +1,3 @@
-import javafx.scene.Node;
-import javafx.scene.layout.Background;
-
 import java.util.ListIterator;
 
 /**

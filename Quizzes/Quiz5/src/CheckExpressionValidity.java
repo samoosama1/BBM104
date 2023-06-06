@@ -19,7 +19,7 @@ public class CheckExpressionValidity {
     }
 
     public void checkValidity(String expression, String outputPath) {
-        String out = String.format("\"%s\" is %s a valid expression", expression, isValid(expression) ? "" : "not");
+        String out = String.format("\"%s\" is%sa valid expression.", expression, isValid(expression) ? " " : " not ");
         FileOutput.writeToFile(outputPath, out, true, true);
     }
 

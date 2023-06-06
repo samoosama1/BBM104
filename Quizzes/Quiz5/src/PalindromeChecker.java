@@ -22,7 +22,7 @@ public class PalindromeChecker {
     }
 
     public void checkPalindrome(String inputString, String outputPath) {
-        String out = String.format("\"%s\" is %s a palindrome", inputString, isPalindrome(inputString) ? "" : "not");
+        String out = String.format("\"%s\" is%sa palindrome.", inputString, isPalindrome(inputString) ? " " : " not ");
         FileOutput.writeToFile(outputPath, out, true, true);
     }
 }
